@@ -115,7 +115,7 @@ def parse_checked(body):
     return {m.group(2) for m in CHECK_RE.finditer(body or "") if m.group(1) in "xX"}
 
 
-def render_issue(drafts, checked, cfg, root=None):
+def render_issue(drafts, checked, cfg, root=None, waiting=()):
     lines = [
         "Centang kotak di depan postingan yang **disetujui**. Sistem akan memostingnya otomatis "
         "pada jadwalnya (dicek tiap ±15 menit). Yang tidak dicentang tidak akan pernah diposting.",
@@ -159,7 +159,17 @@ def render_issue(drafts, checked, cfg, root=None):
             detail += ["", f"**Error terakhir:** {post['last_error']}"]
         detail += ["", "</details>", ""]
         lines += detail
+    if waiting:
+        lines += ["", "---", "", "**Sudah terposting, link menunggu views:**", ""]
+        for post in waiting:
+            link = post.get("permalink") or post.get("threads_id")
+            lines.append(f"- `{post['id']}`: {post.get('reply_status', 'menunggu')} ({link})")
     return "\n".join(lines).rstrip() + "\n"
+
+
+def waiting_replies(posts):
+    return [p for p in posts if p.get("status") == "posted" and p.get("reply_text")
+            and not p.get("reply_id") and not p.get("reply_skipped")]
 
 
 def pending(posts):
@@ -177,14 +187,15 @@ def sync_issue(gh, posts, cfg, root=None):
     issue = gh.find_queue_issue()
     checked = parse_checked(issue["body"]) if issue else set()
     drafts = pending(posts)
-    body = render_issue(drafts, checked, cfg, root)
+    waiting = waiting_replies(posts)
+    body = render_issue(drafts, checked, cfg, root, waiting)
     if issue is None:
         issue = gh.create_issue(ISSUE_TITLE, body)
     elif (issue.get("body") or "").strip() != body.strip():
         # Baca ulang sesaat sebelum menulis agar centang yang baru masuk tidak hilang.
         latest = gh.find_queue_issue()
         checked |= parse_checked(latest["body"]) if latest else set()
-        body = render_issue(drafts, checked, cfg, root)
+        body = render_issue(drafts, checked, cfg, root, waiting)
         gh.update_issue_body(issue["number"], body)
     return issue["number"], checked
 
@@ -197,26 +208,63 @@ def raw_url(rel_path):
     return f"https://raw.githubusercontent.com/{repo}/{ref}/{rel_path}"
 
 
-def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_url, log=print):
-    """Posting yang sudah disetujui dan sudah waktunya. Mengembalikan (terposting, error)."""
-    now = now or datetime.now(timezone.utc)
-    done, errors = [], []
+def reply_decision(post, threads, cfg, now):
+    """Tentukan nasib balasan berlink: ('post'|'wait'|'skip', keterangan)."""
+    posted_at = datetime.fromisoformat(post["posted_at"])
+    delay = timedelta(minutes=cfg.get("reply_delay_minutes", 60))
+    max_wait = timedelta(hours=cfg.get("reply_max_wait_hours", 24))
+    min_views = cfg.get("reply_min_views", 0)
+    if now < posted_at + delay:
+        return "wait", "belum 1 jam"
+    if not min_views:
+        return "post", ""
+    views = (threads.insights(post["threads_id"]) or {}).get("views") or 0
+    post["views_at_check"] = views
+    if views >= min_views:
+        return "post", f"{views} views"
+    if now >= posted_at + max_wait:
+        return "skip", f"hanya {views} views setelah {cfg.get('reply_max_wait_hours', 24)} jam (standar {min_views})"
+    return "wait", f"{views}/{min_views} views"
 
-    # 1) Lengkapi balasan yang sempat gagal pada postingan yang sudah terbit.
+
+def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_url, log=print):
+    """Posting yang sudah disetujui dan sudah waktunya.
+    Balasan berlink dikirim belakangan: minimal `reply_delay_minutes` setelah postingan utama dan
+    hanya bila views >= `reply_min_views`. Mengembalikan (terposting, error, catatan)."""
+    now = now or datetime.now(timezone.utc)
+    done, errors, notes = [], [], []
+
+    # 1) Balasan berlink untuk postingan yang sudah terbit.
     for post in posts:
-        if post.get("status") == "posted" and post.get("reply_text") and not post.get("reply_id") \
-                and post.get("reply_attempts", 0) < cfg.get("max_attempts", 3):
+        if post.get("status") != "posted" or not post.get("reply_text") or post.get("reply_id") \
+                or post.get("reply_skipped") or post.get("reply_attempts", 0) >= cfg.get("max_attempts", 3):
+            continue
+        try:
+            action, why = reply_decision(post, threads, cfg, now)
+        except Exception as e:  # noqa: BLE001
+            errors.append(f"{post['id']} (cek views): {e}")
+            continue
+        if action == "wait":
+            post["reply_status"] = f"menunggu: {why}"
+        elif action == "skip":
+            post["reply_skipped"] = why
+            post.pop("reply_status", None)
+            notes.append(f"Link `{post['id']}` tidak diposting: {why}")
+        else:
             _, reply = final_texts(post, cfg)
             try:
                 post["reply_id"] = threads.post(reply, reply_to_id=post["threads_id"])
+                post["reply_posted_at"] = now.isoformat(timespec="seconds")
                 post.pop("reply_error", None)
+                post.pop("reply_status", None)
+                notes.append(f"Link `{post['id']}` diposting di balasan ({why})")
             except Exception as e:  # noqa: BLE001
                 post["reply_attempts"] = post.get("reply_attempts", 0) + 1
                 post["reply_error"] = str(e)
                 errors.append(f"{post['id']} (balasan): {e}")
-            save_post(post)
+        save_post(post)
 
-    # 2) Postingan baru.
+    # 2) Postingan baru (tanpa link; link menyusul lewat langkah 1).
     budget = cfg.get("max_posts_per_run", 1)
     for post in pending(posts):
         if budget <= 0:
@@ -231,7 +279,7 @@ def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_
         if image_problems(post, root, cfg):
             log(f"{pid}: menunggu gambar")
             continue
-        text, reply = final_texts(post, cfg)
+        text, _ = final_texts(post, cfg)
         try:
             urls = [url_for(rel) for rel in post.get("images") or []]
             post["threads_id"] = threads.post(text, urls)
@@ -243,13 +291,8 @@ def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_
                 post["permalink"] = threads.permalink(post["threads_id"])
             except Exception:  # noqa: BLE001
                 pass
-            if reply:
-                try:
-                    post["reply_id"] = threads.post(reply, reply_to_id=post["threads_id"])
-                except Exception as e:  # noqa: BLE001
-                    post["reply_attempts"] = 1
-                    post["reply_error"] = str(e)
-                    errors.append(f"{pid} (balasan): {e}")
+            if post.get("reply_text"):
+                post["reply_status"] = "menunggu: belum 1 jam"
             done.append(post)
             log(f"{pid}: terposting {post.get('permalink', post['threads_id'])}")
         except Exception as e:  # noqa: BLE001
@@ -259,7 +302,7 @@ def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_
                 post["status"] = "failed"
             errors.append(f"{pid}: {e}")
         save_post(post)
-    return done, errors
+    return done, errors, notes
 
 
 def run_insights(threads, posts, cfg, now=None):

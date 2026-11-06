@@ -12,5 +12,8 @@
   "label_affiliate": "(link afiliasi)",
   "insights_days": 14,
   "watermark_text": "@nara.mixmatch",
-  "account": "nara.mixmatch"
+  "account": "nara.mixmatch",
+  "reply_delay_minutes": 60,
+  "reply_min_views": 300,
+  "reply_max_wait_hours": 24
 }

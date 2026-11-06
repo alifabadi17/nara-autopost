@@ -26,6 +26,9 @@ GitHub Actions yang memposting; tugas Claude adalah mengisi antrean.
 ```
 - Nama file = `id` + `.json`. Zona waktu WITA (+08:00). Slot default ada di `config.json`.
 - 0 gambar = postingan teks, 1 = gambar, 2–10 = carousel. Gambar JPG/PNG ≤ 8 MB di `images/`.
+- Link TIDAK pernah ikut saat postingan utama terbit. `reply_text` diposting otomatis sebagai balasan
+  minimal 60 menit kemudian dan hanya bila views ≥ 300; kalau dalam 24 jam tidak tembus, link batal
+  (atur di `config.json`: `reply_delay_minutes`, `reply_min_views`, `reply_max_wait_hours`).
 - Tidak ada label AI di caption (keputusan pemilik); transparansi lewat bio akun. Label "(link afiliasi)"
   tetap otomatis di balasan berlink.
 - Gambar di `images/` otomatis diberi watermark `@nara.mixmatch` oleh workflow sebelum diposting.

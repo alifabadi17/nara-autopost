@@ -39,12 +39,13 @@ def cmd_post():
     if not os.environ.get("THREADS_TOKEN", "").strip():
         print("THREADS_TOKEN belum diisi: antrean disinkronkan, posting dilewati.")
         return 0
-    done, errors = core.run_posting(_threads(), posts, approved, cfg)
-    if done or errors:
+    done, errors, notes = core.run_posting(_threads(), posts, approved, cfg)
+    if done or errors or notes:
         core.sync_issue(gh, core.load_posts(), cfg)
         msg = []
         for p in done:
             msg.append(f"Terposting `{p['id']}`: {p.get('permalink') or p['threads_id']}")
+        msg += notes
         for e in errors:
             msg.append(f"Gagal: {e}")
         gh.comment(number, "\n".join(msg))

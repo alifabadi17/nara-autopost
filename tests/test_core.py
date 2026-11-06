@@ -96,7 +96,7 @@ class CoreTest(unittest.TestCase):
         now = datetime(2026, 11, 6, 3, 0, tzinfo=timezone.utc)  # 11:00 WITA
         th = FakeThreads()
         posts = self.posts()
-        done, errors = core.run_posting(th, posts, approved, CFG, now=now, root=self.root,
+        done, errors, _ = core.run_posting(th, posts, approved, CFG, now=now, root=self.root,
                                         url_for=lambda r: "u/" + r, log=lambda *a: None)
         self.assertEqual([p["id"] for p in done], ["a"])  # c menunggu gambar, b belum waktunya
         self.assertEqual(errors, [])
@@ -104,7 +104,7 @@ class CoreTest(unittest.TestCase):
         self.assertEqual(saved["status"], "posted")
         # c: gambar diunggah, lalu terposting di run berikutnya
         (self.root / "images" / "c.jpg").write_bytes(b"x")
-        done, _ = core.run_posting(th, self.posts(), approved, CFG, now=now, root=self.root,
+        done, _, _ = core.run_posting(th, self.posts(), approved, CFG, now=now, root=self.root,
                                    url_for=lambda r: "u/" + r, log=lambda *a: None)
         self.assertEqual([p["id"] for p in done], ["c"])
         self.assertEqual(th.calls[-1][1], ["u/images/c.jpg"])
@@ -117,33 +117,77 @@ class CoreTest(unittest.TestCase):
     def test_unapproved_never_posted(self):
         self.add("a")
         th = FakeThreads()
-        done, _ = core.run_posting(th, self.posts(), set(), CFG,
+        done, _, _ = core.run_posting(th, self.posts(), set(), CFG,
                                    now=datetime(2026, 11, 7, tzinfo=timezone.utc), root=self.root,
                                    url_for=str, log=lambda *a: None)
         self.assertEqual(done, [])
         self.assertEqual(th.calls, [])
 
-    def test_reply_retry_and_failures(self):
-        self.add("a", reply_text="https://s.shopee.co.id/x")
-        now = datetime(2026, 11, 7, tzinfo=timezone.utc)
-        th = FakeThreads(fail_reply=True)
-        done, errors = core.run_posting(th, self.posts(), {"a"}, CFG, now=now, root=self.root,
-                                        url_for=str, log=lambda *a: None)
-        self.assertEqual(len(done), 1)
-        self.assertEqual(len(errors), 1)
-        th.fail_reply = False
-        done, errors = core.run_posting(th, self.posts(), {"a"}, CFG, now=now, root=self.root,
-                                        url_for=str, log=lambda *a: None)
+    def test_link_reply_waits_for_hour_and_views(self):
+        from datetime import timedelta
+        cfg = dict(CFG, reply_delay_minutes=60, reply_min_views=300, reply_max_wait_hours=24)
+        self.add("a", reply_text="Kemeja: https://s.shopee.co.id/x")
+        t0 = datetime(2026, 11, 7, tzinfo=timezone.utc)
+        th = FakeThreads()
+        th.views = 50
+        th.insights = lambda mid: {"views": th.views}
+        run = lambda now: core.run_posting(th, self.posts(), {"a"}, cfg, now=now, root=self.root,
+                                           url_for=str, log=lambda *a: None)
+        done, _, _ = run(t0)
+        self.assertEqual(len(th.calls), 1)          # hanya postingan utama, tanpa link
+        self.assertIsNone(th.calls[0][2])
+        run(t0 + timedelta(minutes=30))             # belum 1 jam
+        run(t0 + timedelta(minutes=90))             # 1 jam lewat tapi views 50
+        self.assertEqual(len(th.calls), 1)
         saved = json.loads((self.root / "queue" / "a.json").read_text())
-        self.assertTrue(saved["reply_id"])
-        self.assertEqual(th.calls[-1][2], saved["threads_id"])
-        # posting gagal 3x -> failed
+        self.assertIn("50/300", saved["reply_status"])
+        gh = FakeGH()
+        core.sync_issue(gh, self.posts(), cfg, self.root)
+        self.assertIn("link menunggu views", gh.issue["body"])
+        th.views = 420
+        _, _, notes = run(t0 + timedelta(hours=3))  # views tembus -> link diposting
+        self.assertEqual(len(th.calls), 2)
+        self.assertEqual(th.calls[1][2], "id1")
+        self.assertIn("(link afiliasi)", th.calls[1][0])
+        self.assertIn("420 views", notes[0])
+
+    def test_link_skipped_when_views_never_reach(self):
+        from datetime import timedelta
+        cfg = dict(CFG, reply_delay_minutes=60, reply_min_views=300, reply_max_wait_hours=24)
+        self.add("a", reply_text="https://s.shopee.co.id/x")
+        t0 = datetime(2026, 11, 7, tzinfo=timezone.utc)
+        th = FakeThreads()
+        th.insights = lambda mid: {"views": 120}
+        run = lambda now: core.run_posting(th, self.posts(), {"a"}, cfg, now=now, root=self.root,
+                                           url_for=str, log=lambda *a: None)
+        run(t0)
+        _, _, notes = run(t0 + timedelta(hours=25))
+        self.assertEqual(len(th.calls), 1)
+        saved = json.loads((self.root / "queue" / "a.json").read_text())
+        self.assertIn("120 views", saved["reply_skipped"])
+        run(t0 + timedelta(hours=30))
+        self.assertEqual(len(th.calls), 1)
+
+    def test_failures_and_reply_retry(self):
+        from datetime import timedelta
+        now = datetime(2026, 11, 7, tzinfo=timezone.utc)
         self.add("b")
         th2 = FakeThreads(fail_post=True)
         for _ in range(3):
             core.run_posting(th2, self.posts(), {"b"}, CFG, now=now, root=self.root, url_for=str,
                              log=lambda *a: None)
         self.assertEqual(json.loads((self.root / "queue" / "b.json").read_text())["status"], "failed")
+        cfg = dict(CFG, reply_delay_minutes=60, reply_min_views=0)
+        self.add("c", reply_text="https://s.shopee.co.id/x")
+        th = FakeThreads(fail_reply=True)
+        core.run_posting(th, self.posts(), {"c"}, cfg, now=now, root=self.root, url_for=str, log=lambda *a: None)
+        _, errors, _ = core.run_posting(th, self.posts(), {"c"}, cfg, now=now + timedelta(hours=2),
+                                        root=self.root, url_for=str, log=lambda *a: None)
+        self.assertEqual(len(errors), 1)
+        th.fail_reply = False
+        core.run_posting(th, self.posts(), {"c"}, cfg, now=now + timedelta(hours=3), root=self.root,
+                         url_for=str, log=lambda *a: None)
+        self.assertTrue(json.loads((self.root / "queue" / "c.json").read_text())["reply_id"])
 
     def test_validate(self):
         self.add("x", text="a" * 501)
