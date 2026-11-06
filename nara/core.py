@@ -68,9 +68,10 @@ def final_texts(post, cfg):
     return text, reply
 
 
-def image_problems(post, root=None):
+def image_problems(post, root=None, cfg=None):
     root = Path(root or REPO_ROOT)
     problems = []
+    need_wm = bool((cfg or {}).get("watermark_text"))
     for rel in post.get("images") or []:
         p = root / rel
         if p.suffix.lower() not in IMAGE_EXT:
@@ -79,6 +80,10 @@ def image_problems(post, root=None):
             problems.append(f"{rel}: belum diunggah")
         elif p.stat().st_size > MAX_IMAGE_BYTES:
             problems.append(f"{rel}: lebih dari 8 MB")
+        elif need_wm:
+            from .watermark import is_watermarked
+            if not is_watermarked(p):
+                problems.append(f"{rel}: menunggu watermark")
     return problems
 
 
@@ -126,7 +131,7 @@ def render_issue(drafts, checked, cfg, root=None):
         when = fmt_local(parse_time(post["scheduled_at"]), cfg) if post.get("scheduled_at") else "?"
         first = (post.get("text") or "").strip().splitlines()[0][:70] if post.get("text") else ""
         status = []
-        img_probs = image_problems(post, root)
+        img_probs = image_problems(post, root, cfg)
         if post.get("images"):
             status.append("gambar belum lengkap" if img_probs else "gambar siap")
         probs = validate(post, cfg, root)
@@ -188,7 +193,7 @@ def sync_issue(gh, posts, cfg, root=None):
 
 def raw_url(rel_path):
     repo = os.environ["GITHUB_REPOSITORY"]
-    ref = os.environ.get("GITHUB_SHA") or "main"
+    ref = os.environ.get("IMAGE_REF") or os.environ.get("GITHUB_SHA") or "main"
     return f"https://raw.githubusercontent.com/{repo}/{ref}/{rel_path}"
 
 
@@ -223,7 +228,7 @@ def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_
             continue
         if parse_time(post["scheduled_at"]) > now:
             continue
-        if image_problems(post, root):
+        if image_problems(post, root, cfg):
             log(f"{pid}: menunggu gambar")
             continue
         text, reply = final_texts(post, cfg)

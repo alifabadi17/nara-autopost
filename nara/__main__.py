@@ -1,4 +1,4 @@
-"""Perintah: python -m nara [validate|sync|post|insights|refresh-token|whoami]"""
+"""Perintah: python -m nara [validate|sync|post|watermark|insights|refresh-token|whoami]"""
 import os
 import sys
 
@@ -72,6 +72,18 @@ def cmd_refresh_token(out_path):
     return 0
 
 
+def cmd_watermark():
+    from .watermark import process_dir
+    cfg = core.load_config()
+    text = cfg.get("watermark_text")
+    if not text:
+        print("watermark_text kosong di config.json, dilewati.")
+        return 0
+    n = process_dir(core.REPO_ROOT / "images", text)
+    print(f"{n} gambar diberi watermark.")
+    return 0
+
+
 def cmd_whoami():
     me = _threads().me()
     print(f"Token valid untuk @{me.get('username')} (id {me.get('id')}).")
@@ -94,6 +106,8 @@ def main(argv):
             return cmd_insights()
         if cmd == "refresh-token":
             return cmd_refresh_token(argv[1] if len(argv) > 1 else "new_token.txt")
+        if cmd == "watermark":
+            return cmd_watermark()
         if cmd == "whoami":
             return cmd_whoami()
     except ThreadsError as e:

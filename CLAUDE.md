@@ -26,16 +26,32 @@ GitHub Actions yang memposting; tugas Claude adalah mengisi antrean.
 ```
 - Nama file = `id` + `.json`. Zona waktu WITA (+08:00). Slot default ada di `config.json`.
 - 0 gambar = postingan teks, 1 = gambar, 2–10 = carousel. Gambar JPG/PNG ≤ 8 MB di `images/`.
-- Label "Visual dibuat dengan AI" otomatis ditambahkan ke teks bila ada gambar; hitung ruangnya (total ≤ 500).
+- Tidak ada label AI di caption (keputusan pemilik); transparansi lewat bio akun. Label "(link afiliasi)"
+  tetap otomatis di balasan berlink.
+- Gambar di `images/` otomatis diberi watermark `@nara.mixmatch` oleh workflow sebelum diposting.
+  Metadata asli file (termasuk tanda asal AI) dipertahankan; jangan pernah menghapusnya.
 - Jalankan `python3 -m nara validate` dan `python3 -m unittest discover -s tests` sebelum push.
 
-## Gaya konten (dari riset)
-- Kalimat pertama = hook: angka, situasi, atau masalah tubuh ("Buat yang petite…", "Rate 1–10…").
-- Konteks spesifik: siapa (mahasiswa, karyawan, ibu muda) dan acara (kerja, kondangan, nongki).
-- Bahasa obrolan, emoji 1–3, ajakan membalas di akhir. Link hanya di `reply_text`.
-- Campur: ±50% postingan tanpa link (pertanyaan, opini ringan, polling) supaya akun tidak terlihat spam.
-- Dilarang: klaim "bikin kurus/langsing", merendahkan bentuk tubuh atau daerah ("outfit kabupaten"),
-  rage-bait, foto orang lain tanpa izin.
+## Identitas akun
+@nara.mixmatch, nama "Nara | 1 Item 3 Acara". Nara adalah karakter AI (disebut di bio).
+Nara boleh berpendapat, bertanya, mengkurasi, dan memberi ide padu padan. Nara TIDAK mengaku membeli,
+memakai, atau mencoba produk ("aku udah pake, bahannya adem"). Info kualitas diambil dari data Shopee
+yang nyata dan disebut sumbernya: "rating 4.9, 10rb terjual, kata pembeli bahannya adem".
+
+## Gaya konten (riset beranda Threads, 7 Nov 2026)
+Postingan jualan terang-terangan sepi (0–30 suka): link + tagar, "Yuk checkout sekarang!",
+pujian generik produk. Yang ramai adalah yang mengajak ngobrol warga Threads:
+1. Ajakan pamer/spill ("PAMERIN … KALIAN + HARGANYA") → ratusan balasan.
+2. Pertanyaan ringan yang semua orang bisa jawab ("spill meja kerja kalian").
+3. Opini relate tanpa produk ("In this economy, baju preloved lebih menarik…").
+4. Kurasi daftar 5–8 toko ("toko Shopee yang bahaya buat saldo") → banyak repost/simpan.
+5. Info diskon besar dan nyata → banyak share.
+6. Format kontras singkat (❌ / ❌ / ✅).
+7. Humor jujur dan menyapa "warga Threads".
+Aturan tulis: hook di kalimat pertama, boleh HURUF BESAR untuk emosi, bahasa obrolan, emoji 1–3,
+konteks spesifik (siapa + acara + kisaran harga). Link hanya di `reply_text`.
+Campur: ±50% postingan tanpa link. Dilarang: klaim "bikin kurus/langsing", merendahkan bentuk tubuh
+atau daerah ("outfit kabupaten"), rage-bait, foto orang lain tanpa izin, testimoni palsu.
 
 ## Data performa
 `queue/*.json` yang sudah terposting berisi `insights` (views, likes, replies, reposts, quotes, shares),

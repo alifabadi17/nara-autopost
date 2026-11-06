@@ -1,10 +1,16 @@
 {
   "timezone_offset_hours": 8,
   "timezone_label": "WITA",
-  "slots": ["08:30", "12:30", "19:30"],
+  "slots": [
+    "08:30",
+    "12:30",
+    "19:30"
+  ],
   "max_posts_per_run": 1,
   "max_attempts": 3,
-  "label_ai": "Visual dibuat dengan AI",
+  "label_ai": "",
   "label_affiliate": "(link afiliasi)",
-  "insights_days": 14
+  "insights_days": 14,
+  "watermark_text": "@nara.mixmatch",
+  "account": "nara.mixmatch"
 }

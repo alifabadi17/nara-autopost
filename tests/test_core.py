@@ -158,3 +158,55 @@ class CoreTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class WatermarkTest(unittest.TestCase):
+    def setUp(self):
+        self.dir = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        shutil.rmtree(self.dir)
+
+    def test_jpeg_keeps_provenance_segments(self):
+        import io
+        import struct
+        from PIL import Image
+        from nara import watermark as wm
+        buf = io.BytesIO()
+        Image.new("RGB", (800, 1000), (200, 180, 160)).save(buf, "JPEG")
+        raw = buf.getvalue()
+        app11 = b"\xff\xeb" + struct.pack(">H", 2 + 10) + b"JPc2pa1234"
+        raw = raw[:2] + app11 + raw[2:]
+        out = wm.watermark_bytes(raw, "@nara.mixmatch")
+        self.assertIn(b"JPc2pa1234", out)
+        self.assertNotEqual(Image.open(io.BytesIO(out)).getpixel((760, 960)), (200, 180, 160))
+
+    def test_png_keeps_chunks_and_manifest(self):
+        import zlib
+        import struct
+        from PIL import Image
+        from PIL.PngImagePlugin import PngInfo
+        from nara import watermark as wm
+        info = PngInfo()
+        info.add_itxt("c2pa", "asal-gemini")
+        p = self.dir / "a.png"
+        Image.new("RGB", (600, 600), (10, 20, 30)).save(p, pnginfo=info)
+        self.assertFalse(wm.is_watermarked(p))
+        self.assertEqual(wm.process_dir(self.dir, "@nara.mixmatch", log=lambda *a: None), 1)
+        self.assertTrue(wm.is_watermarked(p))
+        self.assertIn(b"asal-gemini", p.read_bytes())
+        self.assertEqual(Image.open(p).text.get("c2pa"), "asal-gemini")
+        # tidak diproses dua kali
+        self.assertEqual(wm.process_dir(self.dir, "@nara.mixmatch", log=lambda *a: None), 0)
+
+    def test_post_waits_for_watermark(self):
+        from PIL import Image
+        root = self.dir
+        (root / "images").mkdir()
+        Image.new("RGB", (400, 400)).save(root / "images" / "x.jpg")
+        post = {"images": ["images/x.jpg"]}
+        cfg = dict(CFG, watermark_text="@nara.mixmatch")
+        self.assertIn("menunggu watermark", " ".join(core.image_problems(post, root, cfg)))
+        from nara import watermark as wm
+        wm.process_dir(root / "images", "@nara.mixmatch", log=lambda *a: None)
+        self.assertEqual(core.image_problems(post, root, cfg), [])
