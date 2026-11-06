@@ -10,7 +10,16 @@ QUEUE_DIR = REPO_ROOT / "queue"
 MAX_CHARS = 500
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
 IMAGE_EXT = {".jpg", ".jpeg", ".png"}
-ISSUE_TITLE = "Antrean Nara: centang untuk menyetujui"
+ISSUE_TITLES = {
+    "manual": "Antrean Nara: centang untuk menyetujui",
+    "veto": "Antrean Nara: otomatis terposting, centang untuk MEMBATALKAN",
+    "auto": "Antrean Nara: otomatis terposting",
+}
+ISSUE_TITLE = ISSUE_TITLES["manual"]
+
+
+def approval_mode(cfg):
+    return cfg.get("approval_mode", "manual")
 CHECK_RE = re.compile(r"^- \[([ xX])\] `([^`]+)`", re.MULTILINE)
 HARI = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"]
 BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
@@ -116,9 +125,19 @@ def parse_checked(body):
 
 
 def render_issue(drafts, checked, cfg, root=None, waiting=()):
+    mode = approval_mode(cfg)
+    if mode == "manual":
+        intro = ("Centang kotak di depan postingan yang **disetujui**. Sistem akan memostingnya otomatis "
+                 "pada jadwalnya (dicek tiap ±15 menit). Yang tidak dicentang tidak akan pernah diposting.")
+    elif mode == "veto":
+        hours = cfg.get("veto_window_hours", 2)
+        intro = ("Semua postingan di bawah **otomatis terposting** pada jadwalnya. "
+                 "**Centang untuk MEMBATALKAN** (hapus centang untuk mengaktifkan lagi). "
+                 f"Setiap draft tampil minimal {hours} jam di sini sebelum boleh terposting.")
+    else:
+        intro = "Semua postingan di bawah otomatis terposting pada jadwalnya."
     lines = [
-        "Centang kotak di depan postingan yang **disetujui**. Sistem akan memostingnya otomatis "
-        "pada jadwalnya (dicek tiap ±15 menit). Yang tidak dicentang tidak akan pernah diposting.",
+        intro,
         "",
         "Gambar diunggah ke folder `images/` dengan nama persis seperti di daftar. "
         "Postingan yang gambarnya belum ada akan ditunda sampai gambarnya ada.",
@@ -181,23 +200,48 @@ def pending(posts):
     return sorted([p for p in posts if p.get("status", "draft") == "draft"], key=key)
 
 
-def sync_issue(gh, posts, cfg, root=None):
-    """Perbarui issue antrean (tanpa menghapus centang) dan kembalikan (nomor_issue, id_disetujui)."""
+def sync_issue(gh, posts, cfg, root=None, now=None):
+    """Perbarui issue antrean (tanpa menghapus centang) dan kembalikan (nomor_issue, id_boleh_posting).
+    manual: yang dicentang boleh posting. veto: yang TIDAK dicentang boleh posting. auto: semua."""
+    now = now or datetime.now(timezone.utc)
+    mode = approval_mode(cfg)
+    title = ISSUE_TITLES.get(mode, ISSUE_TITLE)
     gh.ensure_label()
     issue = gh.find_queue_issue()
     checked = parse_checked(issue["body"]) if issue else set()
+
+    # Draft yang dibatalkan (mode veto) dan jadwalnya sudah lewat -> status cancelled.
+    if mode == "veto":
+        for post in pending(posts):
+            if post["id"] in checked and parse_time(post["scheduled_at"]) <= now:
+                post["status"] = "cancelled"
+                save_post(post)
+
     drafts = pending(posts)
+    for post in drafts:  # catat kapan draft pertama kali tampil di issue
+        if not post.get("first_listed_at"):
+            post["first_listed_at"] = now.isoformat(timespec="seconds")
+            save_post(post)
     waiting = waiting_replies(posts)
     body = render_issue(drafts, checked, cfg, root, waiting)
     if issue is None:
-        issue = gh.create_issue(ISSUE_TITLE, body)
-    elif (issue.get("body") or "").strip() != body.strip():
-        # Baca ulang sesaat sebelum menulis agar centang yang baru masuk tidak hilang.
+        issue = gh.create_issue(title, body)
+    elif (issue.get("body") or "").strip() != body.strip() or issue.get("title") != title:
+        # Baca ulang sesaat sebelum menulis agar centang terbaru pengguna yang dipakai.
         latest = gh.find_queue_issue()
-        checked |= parse_checked(latest["body"]) if latest else set()
+        if latest:
+            checked = parse_checked(latest["body"])
         body = render_issue(drafts, checked, cfg, root, waiting)
-        gh.update_issue_body(issue["number"], body)
-    return issue["number"], checked
+        gh.update_issue(issue["number"], body, title)
+
+    ids = {p["id"] for p in drafts}
+    if mode == "manual":
+        allowed = checked & ids
+    elif mode == "veto":
+        allowed = ids - checked
+    else:
+        allowed = ids
+    return issue["number"], allowed
 
 
 # ---------- posting ----------
@@ -276,6 +320,12 @@ def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_
             continue
         if parse_time(post["scheduled_at"]) > now:
             continue
+        if approval_mode(cfg) == "veto":
+            listed = post.get("first_listed_at")
+            window = timedelta(hours=cfg.get("veto_window_hours", 2))
+            if not listed or datetime.fromisoformat(listed) + window > now:
+                log(f"{pid}: masa tampil di antrean belum cukup")
+                continue
         if image_problems(post, root, cfg):
             log(f"{pid}: menunggu gambar")
             continue

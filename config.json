@@ -15,5 +15,7 @@
   "account": "nara.mixmatch",
   "reply_delay_minutes": 60,
   "reply_min_views": 300,
-  "reply_max_wait_hours": 24
+  "reply_max_wait_hours": 24,
+  "approval_mode": "veto",
+  "veto_window_hours": 2
 }

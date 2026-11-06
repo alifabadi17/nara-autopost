@@ -50,8 +50,11 @@ class GitHub:
         return self._req("POST", f"/repos/{self.repo}/issues",
                          {"title": title, "body": body, "labels": [LABEL]})
 
-    def update_issue_body(self, number, body):
-        return self._req("PATCH", f"/repos/{self.repo}/issues/{number}", {"body": body})
+    def update_issue(self, number, body, title=None):
+        data = {"body": body}
+        if title:
+            data["title"] = title
+        return self._req("PATCH", f"/repos/{self.repo}/issues/{number}", data)
 
     def comment(self, number, body):
         return self._req("POST", f"/repos/{self.repo}/issues/{number}/comments", {"body": body})

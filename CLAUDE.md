@@ -6,9 +6,13 @@ GitHub Actions yang memposting; tugas Claude adalah mengisi antrean.
 
 ## Alur
 1. Claude menulis draft ke `queue/<id>.json` lalu commit + push ke `main`.
-2. Workflow `Posting Nara` memperbarui issue berlabel `antrean-nara`. Pemilik mencentang yang disetujui.
-3. Draft yang dicentang, sudah waktunya, dan gambarnya lengkap diposting otomatis (maks 1 per 15 menit).
-   Draft yang tidak dicentang TIDAK PERNAH diposting. Jangan pernah mengubah status jadi `posted` secara manual.
+2. Workflow `Posting Nara` memperbarui issue berlabel `antrean-nara`.
+3. Mode persetujuan di `config.json` (`approval_mode`), saat ini **veto**: semua draft otomatis terposting
+   pada jadwalnya, KECUALI pemilik mencentangnya (= batal). Draft harus tampil minimal `veto_window_hours`
+   (2 jam) di issue sebelum boleh terposting, jadi push draft jauh sebelum jadwalnya (idealnya malam sebelumnya).
+   Maks 1 postingan per 15 menit; postingan bergambar menunggu sampai gambarnya ada.
+   Jangan pernah mengubah status jadi `posted` secara manual. Karena tanpa review wajib, cek ulang
+   fakta (harga, rating, terjual) dan aturan gaya dengan teliti sebelum push.
 
 ## Format draft (`queue/<id>.json`)
 ```json

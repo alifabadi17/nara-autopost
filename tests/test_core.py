@@ -44,11 +44,13 @@ class FakeGH:
         return self.issue
 
     def create_issue(self, title, body):
-        self.issue = {"number": 1, "body": body}
+        self.issue = {"number": 1, "body": body, "title": title}
         return self.issue
 
-    def update_issue_body(self, number, body):
+    def update_issue(self, number, body, title=None):
         self.issue["body"] = body
+        if title:
+            self.issue["title"] = title
 
     def comment(self, number, body):
         self.comments.append(body)
@@ -188,6 +190,31 @@ class CoreTest(unittest.TestCase):
         core.run_posting(th, self.posts(), {"c"}, cfg, now=now + timedelta(hours=3), root=self.root,
                          url_for=str, log=lambda *a: None)
         self.assertTrue(json.loads((self.root / "queue" / "c.json").read_text())["reply_id"])
+
+    def test_veto_mode(self):
+        from datetime import timedelta
+        cfg = dict(CFG, approval_mode="veto", veto_window_hours=2)
+        self.add("a", when="2026-11-07T10:00:00+08:00")
+        self.add("b", when="2026-11-07T10:00:00+08:00")
+        gh = FakeGH()
+        t_list = datetime(2026, 11, 7, 1, 30, tzinfo=timezone.utc)   # 09:30 WITA, draft baru tampil
+        _, allowed = core.sync_issue(gh, self.posts(), cfg, self.root, now=t_list)
+        self.assertEqual(allowed, {"a", "b"})
+        self.assertIn("MEMBATALKAN", gh.issue["title"])
+        gh.issue["body"] = gh.issue["body"].replace("- [ ] `b`", "- [x] `b`")   # b dibatalkan
+        th = FakeThreads()
+        t_due = datetime(2026, 11, 7, 2, 5, tzinfo=timezone.utc)     # 10:05 WITA, baru 35 menit tampil
+        _, allowed = core.sync_issue(gh, self.posts(), cfg, self.root, now=t_due)
+        self.assertEqual(allowed, {"a"})
+        done, _, _ = core.run_posting(th, self.posts(), allowed, cfg, now=t_due, root=self.root,
+                                      url_for=str, log=lambda *a: None)
+        self.assertEqual(done, [])                                    # masa tampil belum 2 jam
+        t_ok = t_list + timedelta(hours=2, minutes=1)
+        _, allowed = core.sync_issue(gh, self.posts(), cfg, self.root, now=t_ok)
+        done, _, _ = core.run_posting(th, self.posts(), allowed, cfg, now=t_ok, root=self.root,
+                                      url_for=str, log=lambda *a: None)
+        self.assertEqual([p["id"] for p in done], ["a"])
+        self.assertEqual(json.loads((self.root / "queue" / "b.json").read_text())["status"], "cancelled")
 
     def test_validate(self):
         self.add("x", text="a" * 501)
