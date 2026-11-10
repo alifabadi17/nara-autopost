@@ -70,6 +70,10 @@ konteks spesifik (siapa + acara + kisaran harga). Link hanya di `reply_text`.
 Campur: ±50% postingan tanpa link. Dilarang: klaim "bikin kurus/langsing", merendahkan bentuk tubuh
 atau daerah ("outfit kabupaten"), rage-bait, foto orang lain tanpa izin, testimoni palsu.
 
+## Riset referensi
+File di `research/` (mis. `research/helwa-bashel.md`) berisi toko dan gaya acuan pilihan pemilik.
+Pakai sebagai sumber utama saat memilih produk. Jangan pakai link afiliasi atau foto milik kreator lain.
+
 ## Data performa
 `queue/*.json` yang sudah terposting berisi `insights` (views, likes, replies, reposts, quotes, shares),
 diperbarui tiap malam. Pakai ini untuk memilih hook dan jam yang berhasil.
