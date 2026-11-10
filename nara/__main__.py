@@ -106,6 +106,9 @@ def cmd_generate():
         print("GEMINI_API_KEY belum diisi: gambar dibuat manual.")
         return 0
     cfg = core.load_config()
+    if not cfg.get("gen_max_per_day"):
+        print("Pembuat gambar otomatis dimatikan (gen_max_per_day = 0).")
+        return 0
     posts = core.load_posts()
     if not any(p.get("image_prompt") for p in core.pending(posts)):
         return 0

@@ -19,6 +19,6 @@
   "approval_mode": "veto",
   "veto_window_hours": 2,
   "gemini_model": "",
-  "gen_max_per_day": 6,
+  "gen_max_per_day": 0,
   "image_aspect_ratio": "4:5"
 }

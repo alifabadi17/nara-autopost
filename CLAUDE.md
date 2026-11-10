@@ -41,6 +41,8 @@ GitHub Actions yang memposting; tugas Claude adalah mengisi antrean.
      outfit di gambar itu, lalu cari produk Shopee yang mirip. Pakai path `images/bank/<nama>`.
   2. **Gemini API otomatis**: isi `image_prompt` dan path baru `images/<id>-1.jpg` yang belum ada.
      Workflow membuatnya (gaya dari `prompts/nara.md` + referensi `images/ref/`), maks `gen_max_per_day`.
+     STATUS 10 Nov 2026: free tier Gemini untuk model gambar berkuota 0, jadi `gen_max_per_day` = 0 (mati)
+     sampai billing aktif. Untuk sekarang pakai bank gambar.
   3. Kalau keduanya tidak tersedia, pemilik membuat manual dari `image_prompt`.
   Jangan pernah mengubah atau memberi watermark pada `images/ref/`.
 - Gambar di `images/` dan `images/bank/` otomatis diberi watermark `@nara.mixmatch` oleh workflow sebelum diposting.
