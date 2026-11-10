@@ -1,4 +1,4 @@
-"""Perintah: python -m nara [validate|sync|post|watermark|insights|refresh-token|whoami]"""
+"""Perintah: python -m nara [validate|sync|post|generate|watermark|gemini-test|insights|refresh-token|whoami]"""
 import os
 import sys
 
@@ -80,8 +80,75 @@ def cmd_watermark():
     if not text:
         print("watermark_text kosong di config.json, dilewati.")
         return 0
-    n = process_dir(core.REPO_ROOT / "images", text)
+    n = sum(process_dir(core.REPO_ROOT / d, text) for d in ("images", "images/bank"))
     print(f"{n} gambar diberi watermark.")
+    return 0
+
+
+def _gemini_key():
+    return os.environ.get("GEMINI_API_KEY", "").strip()
+
+
+def _pick_model(key, cfg):
+    from .gemini import image_models
+    if cfg.get("gemini_model"):
+        return cfg["gemini_model"]
+    models = image_models(key)
+    if not models:
+        raise RuntimeError("Tidak ada model gambar yang tersedia untuk API key ini")
+    return models[0]
+
+
+def cmd_generate():
+    from .gemini import generate_image, GeminiError
+    key = _gemini_key()
+    if not key:
+        print("GEMINI_API_KEY belum diisi: gambar dibuat manual.")
+        return 0
+    cfg = core.load_config()
+    posts = core.load_posts()
+    if not any(p.get("image_prompt") for p in core.pending(posts)):
+        return 0
+    try:
+        model = _pick_model(key, cfg)
+    except (GeminiError, RuntimeError) as e:
+        print(f"Gemini tidak bisa dipakai: {e}")
+        return 0
+    gen = lambda prompt, refs: generate_image(key, model, prompt, refs, cfg.get("image_aspect_ratio", "4:5"))
+    n = core.run_generate(gen, posts, cfg)
+    print(f"{n} gambar dibuat dengan {model}.")
+    return 0
+
+
+def cmd_gemini_test():
+    """Cek model gambar apa saja yang bisa dipakai API key ini dan coba buat 1 gambar."""
+    from .gemini import image_models, generate_image, GeminiError
+    out_dir = core.REPO_ROOT / "reports"
+    out_dir.mkdir(exist_ok=True)
+    lines = ["# Tes Gemini API", ""]
+    key = _gemini_key()
+    if not key:
+        lines.append("GEMINI_API_KEY belum diisi di Secrets.")
+    else:
+        try:
+            models = image_models(key)
+            lines.append("Model gambar tersedia: " + (", ".join(models) or "(tidak ada)"))
+        except GeminiError as e:
+            models = []
+            lines.append(f"Gagal membaca daftar model: {e}")
+        prompt = ("Foto fashion realistis seorang perempuan muda Indonesia memakai kemeja putih oversized "
+                  "dan celana kulot krem, berdiri di depan dinding polos, cahaya natural, potret 4:5.")
+        for model in models[:4]:
+            try:
+                data, mime = generate_image(key, model, prompt)
+                ext = ".png" if "png" in (mime or "") else ".jpg"
+                (out_dir / f"gemini-test{ext}").write_bytes(data)
+                lines.append(f"\nBERHASIL dengan `{model}` ({len(data) // 1024} KB). Gambar: reports/gemini-test{ext}")
+                break
+            except GeminiError as e:
+                lines.append(f"\nGAGAL `{model}`: {e}")
+    (out_dir / "gemini-test.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n".join(lines))
     return 0
 
 
@@ -109,6 +176,10 @@ def main(argv):
             return cmd_refresh_token(argv[1] if len(argv) > 1 else "new_token.txt")
         if cmd == "watermark":
             return cmd_watermark()
+        if cmd == "generate":
+            return cmd_generate()
+        if cmd == "gemini-test":
+            return cmd_gemini_test()
         if cmd == "whoami":
             return cmd_whoami()
     except ThreadsError as e:

@@ -176,6 +176,8 @@ def render_issue(drafts, checked, cfg, root=None, waiting=()):
             detail += ["", "**Masalah:** " + "; ".join(probs)]
         if post.get("last_error"):
             detail += ["", f"**Error terakhir:** {post['last_error']}"]
+        if post.get("image_error"):
+            detail += ["", f"**Gagal membuat gambar otomatis:** {post['image_error']}"]
         detail += ["", "</details>", ""]
         lines += detail
     if waiting:
@@ -242,6 +244,65 @@ def sync_issue(gh, posts, cfg, root=None, now=None):
     else:
         allowed = ids
     return issue["number"], allowed
+
+
+# ---------- gambar otomatis (Gemini) ----------
+
+def used_images(posts, exclude_id=None):
+    return {img for p in posts if p.get("id") != exclude_id and p.get("status") in ("posted", "draft")
+            for img in p.get("images") or []}
+
+
+def run_generate(gen, posts, cfg, root=None, today=None, log=print):
+    """Buat gambar yang belum ada untuk draft yang punya image_prompt.
+    gen(prompt, refs) -> (bytes, mime). Mengembalikan jumlah gambar dibuat."""
+    root = Path(root or REPO_ROOT)
+    today = today or datetime.now(timezone.utc).astimezone(local_tz(cfg)).date().isoformat()
+    counter_path = root / "images" / ".generated.json"
+    counter = json.loads(counter_path.read_text()) if counter_path.exists() else {}
+    limit = cfg.get("gen_max_per_day", 6)
+    style = (root / "prompts" / "nara.md")
+    style = style.read_text(encoding="utf-8").strip() if style.exists() else ""
+    refs = sorted(p for p in (root / "images" / "ref").glob("*") if p.suffix.lower() in IMAGE_EXT)[:3]
+    made = 0
+    for post in pending(posts):
+        if not post.get("image_prompt"):
+            continue
+        changed = False
+        for i, rel in enumerate(list(post.get("images") or [])):
+            target = root / rel
+            if target.exists() or rel.startswith("images/bank/"):
+                continue
+            if counter.get(today, 0) >= limit:
+                log(f"Batas {limit} gambar/hari tercapai")
+                break
+            prompt = (style + "\n\n" if style else "") + post["image_prompt"]
+            if len(post["images"]) > 1:
+                prompt += f"\n\nIni gambar ke-{i + 1} dari {len(post['images'])} dalam satu carousel."
+            try:
+                data, mime = gen(prompt, refs)
+            except Exception as e:  # noqa: BLE001
+                post["image_error"] = str(e)[:300]
+                save_post(post)
+                log(f"{post['id']}: gagal membuat gambar: {e}")
+                return made
+            ext = ".png" if "png" in (mime or "") else ".jpg"
+            if target.suffix.lower() != ext:
+                target = target.with_suffix(ext)
+                post["images"][i] = str(target.relative_to(root))
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(data)
+            counter[today] = counter.get(today, 0) + 1
+            made += 1
+            changed = True
+            post.pop("image_error", None)
+            post["image_source"] = "gemini"
+            log(f"{post['id']}: gambar dibuat -> {post['images'][i]}")
+        if changed:
+            save_post(post)
+    if made:
+        counter_path.write_text(json.dumps({k: counter[k] for k in sorted(counter)[-14:]}, indent=2) + "\n")
+    return made
 
 
 # ---------- posting ----------
@@ -328,6 +389,11 @@ def run_posting(threads, posts, approved, cfg, now=None, root=None, url_for=raw_
                 continue
         if image_problems(post, root, cfg):
             log(f"{pid}: menunggu gambar")
+            continue
+        reused = set(post.get("images") or []) & {
+            img for p in posts if p.get("id") != pid and p.get("status") == "posted" for img in p.get("images") or []}
+        if reused:
+            log(f"{pid}: gambar sudah pernah diposting: {', '.join(sorted(reused))}")
             continue
         text, _ = final_texts(post, cfg)
         try:

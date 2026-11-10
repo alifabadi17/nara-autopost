@@ -35,7 +35,15 @@ GitHub Actions yang memposting; tugas Claude adalah mengisi antrean.
   (atur di `config.json`: `reply_delay_minutes`, `reply_min_views`, `reply_max_wait_hours`).
 - Tidak ada label AI di caption (keputusan pemilik); transparansi lewat bio akun. Label "(link afiliasi)"
   tetap otomatis di balasan berlink.
-- Gambar di `images/` otomatis diberi watermark `@nara.mixmatch` oleh workflow sebelum diposting.
+- Sumber gambar, urutan prioritas:
+  1. **Bank gambar** `images/bank/`: foto Nara yang dibuat pemilik di Gem secara batch. Lihat gambarnya,
+     pilih yang belum pernah dipakai (cek `images` di semua file `queue/`), tulis caption yang sesuai
+     outfit di gambar itu, lalu cari produk Shopee yang mirip. Pakai path `images/bank/<nama>`.
+  2. **Gemini API otomatis**: isi `image_prompt` dan path baru `images/<id>-1.jpg` yang belum ada.
+     Workflow membuatnya (gaya dari `prompts/nara.md` + referensi `images/ref/`), maks `gen_max_per_day`.
+  3. Kalau keduanya tidak tersedia, pemilik membuat manual dari `image_prompt`.
+  Jangan pernah mengubah atau memberi watermark pada `images/ref/`.
+- Gambar di `images/` dan `images/bank/` otomatis diberi watermark `@nara.mixmatch` oleh workflow sebelum diposting.
   Metadata asli file (termasuk tanda asal AI) dipertahankan; jangan pernah menghapusnya.
 - Jalankan `python3 -m nara validate` dan `python3 -m unittest discover -s tests` sebelum push.
 

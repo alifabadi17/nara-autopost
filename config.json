@@ -17,5 +17,8 @@
   "reply_min_views": 300,
   "reply_max_wait_hours": 24,
   "approval_mode": "veto",
-  "veto_window_hours": 2
+  "veto_window_hours": 2,
+  "gemini_model": "",
+  "gen_max_per_day": 6,
+  "image_aspect_ratio": "4:5"
 }

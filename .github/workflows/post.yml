@@ -32,11 +32,14 @@ jobs:
           git config user.email "nara-bot@users.noreply.github.com"
           git pull -q --rebase origin main || true
 
-      - name: Watermark gambar baru
+      - name: Buat gambar otomatis (Gemini) dan watermark
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           pip install -q pillow
+          python3 -m nara generate
           python3 -m nara watermark
-          git add images
+          git add images queue
           if ! git diff --cached --quiet; then
             git commit -q -m "Watermark gambar"
             for i in 1 2 3; do

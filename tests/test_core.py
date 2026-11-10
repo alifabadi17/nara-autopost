@@ -281,3 +281,55 @@ class WatermarkTest(unittest.TestCase):
         from nara import watermark as wm
         wm.process_dir(root / "images", "@nara.mixmatch", log=lambda *a: None)
         self.assertEqual(core.image_problems(post, root, cfg), [])
+
+
+class GenerateTest(unittest.TestCase):
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp())
+        for d in ("queue", "images/ref", "prompts"):
+            (self.root / d).mkdir(parents=True)
+        (self.root / "prompts" / "nara.md").write_text("GAYA NARA")
+        (self.root / "images" / "ref" / "r1.jpg").write_bytes(b"ref")
+
+    def tearDown(self):
+        shutil.rmtree(self.root)
+
+    def add(self, pid, **kw):
+        data = {"id": pid, "status": "draft", "scheduled_at": "2026-11-11T12:30:00+08:00", "text": "x", **kw}
+        (self.root / "queue" / f"{pid}.json").write_text(json.dumps(data))
+
+    def test_generates_missing_images_with_style_refs_and_limit(self):
+        calls = []
+
+        def gen(prompt, refs):
+            calls.append((prompt, [r.name for r in refs]))
+            return b"\x89PNG fake", "image/png"
+
+        self.add("a", images=["images/a-1.jpg", "images/a-2.jpg"], image_prompt="kemeja putih")
+        self.add("b", images=["images/bank/x.jpg"], image_prompt="tidak dibuat")  # bank: dilewati
+        self.add("c", images=["images/c-1.jpg"])                                  # tanpa prompt
+        cfg = dict(CFG, gen_max_per_day=1)
+        posts = core.load_posts(self.root / "queue")
+        n = core.run_generate(gen, posts, cfg, root=self.root, today="2026-11-11", log=lambda *a: None)
+        self.assertEqual(n, 1)
+        self.assertTrue(calls[0][0].startswith("GAYA NARA"))
+        self.assertIn("kemeja putih", calls[0][0])
+        self.assertEqual(calls[0][1], ["r1.jpg"])
+        saved = json.loads((self.root / "queue" / "a.json").read_text())
+        self.assertEqual(saved["images"][0], "images/a-1.png")  # ekstensi ikut format asli
+        self.assertTrue((self.root / "images" / "a-1.png").exists())
+        # hari yang sama: batas tercapai; hari berikutnya: lanjut gambar kedua
+        posts = core.load_posts(self.root / "queue")
+        self.assertEqual(core.run_generate(gen, posts, cfg, root=self.root, today="2026-11-11",
+                                           log=lambda *a: None), 0)
+        self.assertEqual(core.run_generate(gen, posts, cfg, root=self.root, today="2026-11-12",
+                                           log=lambda *a: None), 1)
+
+    def test_error_is_recorded(self):
+        def gen(prompt, refs):
+            raise RuntimeError("HTTP 429: quota")
+        self.add("a", images=["images/a-1.jpg"], image_prompt="p")
+        n = core.run_generate(gen, core.load_posts(self.root / "queue"), CFG, root=self.root,
+                              today="2026-11-11", log=lambda *a: None)
+        self.assertEqual(n, 0)
+        self.assertIn("429", json.loads((self.root / "queue" / "a.json").read_text())["image_error"])
