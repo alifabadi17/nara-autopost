@@ -3,14 +3,14 @@
   "id": "2026-11-13-millionaire-pants",
   "scheduled_at": "2026-11-13T12:30:00+08:00",
   "series": "1item3acara",
-  "text": "1 CELANA, 3 ACARA: straight wide-leg 👖\n\n1️⃣ Ngantor: kemeja putih dimasukin + loafers\n2️⃣ Nongki sore: kaos rib + cardigan rajut + sneakers\n3️⃣ Kondangan siang: blouse satin senada + flat shoes\n\nCelananya MILLION Millionaire Pants (±256rb). Kalian paling pengen pake ke acara yang mana?",
+  "text": "1 CELANA, 3 ACARA: straight wide-leg 👖\n\n1️⃣ Ngantor: kemeja putih dimasukin + loafers\n2️⃣ Nongki sore: kaos rib + cardigan rajut + sneakers\n3️⃣ Kondangan siang: blouse satin sage + flat shoes\n\nCelananya MILLION Millionaire Pants (±256rb). Kalian paling pengen pake ke acara yang mana?",
   "reply_text": "Celananya di sini: https://s.shopee.co.id/6filutdHO3\nHarga bisa berubah, cek lagi di tokonya ya",
   "images": [
     "images/2026-11-13-millionaire-pants-1.jpg",
     "images/2026-11-13-millionaire-pants-2.jpg",
     "images/2026-11-13-millionaire-pants-3.jpg"
   ],
-  "image_prompt": "Lampirkan foto produk celana MILLION Millionaire Pants dari halaman Shopee-nya (pilih satu warna). Buat 3 foto Nara memakai celana yang PERSIS sama dengan foto produk itu, potongan straight wide-leg, untuk 3 acara: (1) ke kantor: kemeja putih rapi dimasukkan, loafers, tas kerja; latar kantor modern. (2) nongkrong sore: kaos rib fitted, cardigan rajut, sneakers putih; latar kafe. (3) kondangan siang: blouse satin warna senada, flat shoes, tas kecil; latar taman acara. Badan penuh dari kepala sampai kaki, celana terlihat jelas, rasio 4:5, tanpa teks.",
+  "image_prompt": "Lampirkan foto produk products/2026-11-13-millionaire-pants.jpg. Ambil HANYA celananya: celana panjang warna krem/off-white, model straight wide-leg dengan lipit (pleated) di depan dan pinggang tinggi. Abaikan model, atasan, dan sepatu di foto produk. Buat 3 foto Nara (wajah dan tubuh sesuai karakter Nara) memakai celana yang PERSIS sama itu, untuk 3 acara: (1) ke kantor: kemeja putih rapi dimasukkan, ikat pinggang cokelat, loafers hitam, tas kerja; latar kantor modern. (2) nongkrong sore: kaos rib cokelat muda, cardigan rajut, sneakers putih; latar kafe. (3) kondangan siang: blouse satin warna sage, flat shoes, tas kecil; latar taman acara. Badan penuh dari kepala sampai kaki, celana terlihat jelas, rasio 4:5, tanpa teks.",
   "products": [
     {
       "item": "MILLION Millionaire Pants (straight wide-leg)",
