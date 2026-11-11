@@ -56,5 +56,6 @@ Sumber: tiktok.com/@helwabasheel, collshp.com/helwabashel,
 idntimes.com (9 Ide OOTD Layering ala Helwa Bashel), popmama.com (outfit bukber earth tone).
 
 LATAR FOTO NARA (dipilih pemilik 11 Nov 2026)
-- Gaya kamar gelap mewah ala Helwa, tapi TANPA ranjang bertiang empat dan TV perapian (ciri khas Helwa).
+- 3 ruangan terinspirasi Helwa: ruang sage dekat pintu kaca (kerja), kamar putih minimalis (santai), kamar gelap mewah (formal).
+- TANPA ranjang bertiang empat dan TV perapian (ciri khas Helwa).
 - Deskripsi di prompts/nara.md dipakai untuk semua foto seri.
