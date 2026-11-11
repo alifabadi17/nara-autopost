@@ -3,22 +3,74 @@
   "id": "2026-11-13-millionaire-pants",
   "scheduled_at": "2026-11-13T12:30:00+08:00",
   "series": "1item3acara",
-  "text": "1 CELANA, 3 ACARA: straight wide-leg 👖\n\n1️⃣ Ngantor: kemeja putih dimasukin + loafers\n2️⃣ Nongki sore: kaos rib + cardigan rajut + sneakers\n3️⃣ Kondangan siang: blouse satin sage + flat shoes\n\nCelananya MILLION Millionaire Pants (±256rb). Kalian paling pengen pake ke acara yang mana?",
-  "reply_text": "Celananya di sini: https://s.shopee.co.id/6filutdHO3\nHarga bisa berubah, cek lagi di tokonya ya",
+  "text": "1 CELANA, 3 ACARA: straight wide-leg krem 👖\n\n1️⃣ Ngantor: kemeja putih + loafers Mary Jane + tas kulit cokelat\n2️⃣ Nongki sore: basic tee + cardigan rajut cokelat + sneakers putih\n3️⃣ Kondangan siang: kemeja satin navy + flat shoes pita + tas mini\n\nSemua itemnya ada linknya di balasan, jadi ga usah nanya \"bajunya apa\" lagi 😆 Kalian paling suka look yang mana?",
+  "reply_text": "Detail outfitnya:\nCelana: https://s.shopee.co.id/6filutdHO3\n1️⃣ Kemeja: https://s.shopee.co.id/1qdWF4I9Bf\nLoafers: https://s.shopee.co.id/6filzxQlQH\nTas: https://s.shopee.co.id/50aXvf0APa\n2️⃣ Tee: https://s.shopee.co.id/3LSK1q8BOf\nCardigan: https://s.shopee.co.id/1LhFZ7it9V\nSneakers: https://s.shopee.co.id/4LKrDlKqgL\n3️⃣ Satin: https://s.shopee.co.id/5q9f0WeqiG\nFlat: https://s.shopee.co.id/1BNpRxMwd6\nTas mini: https://s.shopee.co.id/3qOacriHIr",
   "images": [
     "images/2026-11-13-millionaire-pants-1.jpg",
     "images/2026-11-13-millionaire-pants-2.jpg",
     "images/2026-11-13-millionaire-pants-3.jpg"
   ],
-  "image_prompt": "Lampirkan foto produk products/2026-11-13-millionaire-pants.jpg. Ambil HANYA celananya: celana panjang warna krem/off-white, model straight wide-leg dengan lipit (pleated) di depan dan pinggang tinggi. Abaikan model, atasan, dan sepatu di foto produk. Buat 3 foto Nara (wajah dan tubuh sesuai karakter Nara) memakai celana yang PERSIS sama itu, untuk 3 acara: (1) ke kantor: kemeja putih rapi dimasukkan, ikat pinggang cokelat, loafers hitam, tas kerja; latar kantor modern. (2) nongkrong sore: kaos rib cokelat muda, cardigan rajut, sneakers putih; latar kafe. (3) kondangan siang: blouse satin warna sage, flat shoes, tas kecil; latar taman acara. Badan penuh dari kepala sampai kaki, celana terlihat jelas, rasio 4:5, tanpa teks.",
+  "image_prompt": "FOTO 1 (ngantor). Lampirkan: products/2026-11-13-millionaire-pants.jpg, products/kemeja-elsa.jpg, products/loafers-cekhas-zudith.jpg, products/flicka-solana.jpg. Buat foto Nara memakai PERSIS item-item di foto produk itu: celana krem straight wide-leg berlipit, kemeja putih dimasukkan ke celana, loafers Mary Jane hitam bertali, tas bahu kulit cokelat tua. Abaikan model di foto produk. Latar kantor modern.\n\nFOTO 2 (nongki sore). Lampirkan: products/2026-11-13-millionaire-pants.jpg, products/top-awsome-basic.jpg, products/million-madison-cardigan.jpg, products/sneakers-mjc-fabrica.jpg. Nara memakai celana krem yang sama, kaos basic fitted putih gading, cardigan rajut cokelat dikancing sebagian, sneakers putih. Latar kafe.\n\nFOTO 3 (kondangan siang). Lampirkan: products/2026-11-13-millionaire-pants.jpg, products/kemeja-satin-premium.jpg, products/flat-pluvia-anne.jpg, products/tas-rainsmore-mini.jpg. Nara memakai celana krem yang sama, kemeja satin navy dimasukkan, flat shoes balet hitam berpita, tas mini lilac berantai emas. Latar taman acara.\n\nUntuk semua foto: wajah dan tubuh sesuai karakter Nara, badan penuh dari kepala sampai kaki, semua item terlihat jelas, rasio 4:5, tanpa teks.",
   "products": [
     {
-      "item": "MILLION Millionaire Pants (straight wide-leg)",
-      "shop": "MILLION",
+      "item": "MILLION Millionaire Pants (krem)",
       "url": "https://s.shopee.co.id/6filutdHO3",
       "price": 256500,
-      "sold": "386 terjual",
-      "commission": "9,5%"
+      "sold": "386 terjual"
+    },
+    {
+      "item": "Kemeja Kerja Wanita Elsa putih",
+      "url": "https://s.shopee.co.id/1qdWF4I9Bf",
+      "price": 89900,
+      "sold": "10RB+ terjual"
+    },
+    {
+      "item": "CEKHAS Zudith Black Loafers",
+      "url": "https://s.shopee.co.id/6filzxQlQH",
+      "price": 324000,
+      "sold": "8RB+ terjual"
+    },
+    {
+      "item": "FLICKA Solana Bag",
+      "url": "https://s.shopee.co.id/50aXvf0APa",
+      "price": 199000,
+      "sold": "4RB+ terjual"
+    },
+    {
+      "item": "Awsome Perfect Fit Basic Top",
+      "url": "https://s.shopee.co.id/3LSK1q8BOf",
+      "price": 56020,
+      "sold": "10RB+ terjual"
+    },
+    {
+      "item": "MILLION Madison Knit Cardigan",
+      "url": "https://s.shopee.co.id/1LhFZ7it9V",
+      "price": 224250,
+      "sold": "139 terjual"
+    },
+    {
+      "item": "MJC Sneakers Fabrica All White",
+      "url": "https://s.shopee.co.id/4LKrDlKqgL",
+      "price": 113850,
+      "sold": "10RB+ terjual"
+    },
+    {
+      "item": "Kemeja Satin Premium (navy)",
+      "url": "https://s.shopee.co.id/5q9f0WeqiG",
+      "price": 79363,
+      "sold": "10RB+ terjual"
+    },
+    {
+      "item": "Pluvia ANNE Flat Shoes",
+      "url": "https://s.shopee.co.id/1BNpRxMwd6",
+      "price": 100000,
+      "sold": "10RB+ terjual"
+    },
+    {
+      "item": "RAINSMORE Mini Sling Bag",
+      "url": "https://s.shopee.co.id/3qOacriHIr",
+      "price": 117000,
+      "sold": "10RB+ terjual"
     }
   ],
   "first_listed_at": "2026-11-11T10:42:48+00:00"
