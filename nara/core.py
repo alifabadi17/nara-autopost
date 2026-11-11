@@ -202,10 +202,32 @@ def pending(posts):
     return sorted([p for p in posts if p.get("status", "draft") == "draft"], key=key)
 
 
+def fix_image_extensions(posts, root=None):
+    """Kalau draft menunggu 'x.jpg' tapi yang diunggah 'x.png' (atau sebaliknya), pakai file yang ada."""
+    root = Path(root or REPO_ROOT)
+    for post in posts:
+        if post.get("status", "draft") != "draft":
+            continue
+        changed = False
+        for i, rel in enumerate(list(post.get("images") or [])):
+            target = root / rel
+            if target.exists():
+                continue
+            for ext in (".jpg", ".jpeg", ".png", ".JPG", ".JPEG", ".PNG"):
+                alt = target.with_suffix(ext)
+                if alt.exists():
+                    post["images"][i] = str(alt.relative_to(root))
+                    changed = True
+                    break
+        if changed:
+            save_post(post)
+
+
 def sync_issue(gh, posts, cfg, root=None, now=None):
     """Perbarui issue antrean (tanpa menghapus centang) dan kembalikan (nomor_issue, id_boleh_posting).
     manual: yang dicentang boleh posting. veto: yang TIDAK dicentang boleh posting. auto: semua."""
     now = now or datetime.now(timezone.utc)
+    fix_image_extensions(posts, root)
     mode = approval_mode(cfg)
     title = ISSUE_TITLES.get(mode, ISSUE_TITLE)
     gh.ensure_label()

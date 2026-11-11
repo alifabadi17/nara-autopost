@@ -333,3 +333,18 @@ class GenerateTest(unittest.TestCase):
                               today="2026-11-11", log=lambda *a: None)
         self.assertEqual(n, 0)
         self.assertIn("429", json.loads((self.root / "queue" / "a.json").read_text())["image_error"])
+
+
+class ExtensionTest(unittest.TestCase):
+    def test_png_uploaded_for_jpg_path(self):
+        root = Path(tempfile.mkdtemp())
+        try:
+            (root / "queue").mkdir(); (root / "images").mkdir()
+            (root / "queue" / "a.json").write_text(json.dumps({"id": "a", "status": "draft",
+                "scheduled_at": "2026-11-13T12:30:00+08:00", "text": "x", "images": ["images/a-1.jpg"]}))
+            (root / "images" / "a-1.png").write_bytes(b"x")
+            posts = core.load_posts(root / "queue")
+            core.fix_image_extensions(posts, root)
+            self.assertEqual(json.loads((root / "queue" / "a.json").read_text())["images"], ["images/a-1.png"])
+        finally:
+            shutil.rmtree(root)
