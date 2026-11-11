@@ -1,0 +1,33 @@
+name: Ambil foto produk
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["products/urls.json"]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unduh foto produk
+        run: |
+          pip install -q pillow
+          python3 -m nara fetch-products
+      - name: Simpan
+        run: |
+          git config user.name "nara-bot"
+          git config user.email "nara-bot@users.noreply.github.com"
+          git add products
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -q -m "Foto produk untuk Gem"
+          for i in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1

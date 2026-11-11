@@ -155,6 +155,29 @@ def cmd_gemini_test():
     return 0
 
 
+def cmd_fetch_products():
+    """Unduh foto produk (products/urls.json) menjadi JPG di products/ untuk dilampirkan ke Gem."""
+    import io
+    import json
+    import urllib.request
+    from PIL import Image
+    folder = core.REPO_ROOT / "products"
+    urls = json.loads((folder / "urls.json").read_text())
+    n = 0
+    for name, url in urls.items():
+        out = folder / f"{name}.jpg"
+        if out.exists():
+            continue
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            data = r.read()
+        Image.open(io.BytesIO(data)).convert("RGB").save(out, "JPEG", quality=92)
+        n += 1
+        print(f"foto produk: {out.name}")
+    print(f"{n} foto produk diunduh.")
+    return 0
+
+
 def cmd_whoami():
     me = _threads().me()
     print(f"Token valid untuk @{me.get('username')} (id {me.get('id')}).")
@@ -183,6 +206,8 @@ def main(argv):
             return cmd_generate()
         if cmd == "gemini-test":
             return cmd_gemini_test()
+        if cmd == "fetch-products":
+            return cmd_fetch_products()
         if cmd == "whoami":
             return cmd_whoami()
     except ThreadsError as e:
