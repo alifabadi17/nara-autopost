@@ -1,5 +1,5 @@
 {
-  "status": "draft",
+  "status": "posted",
   "id": "2026-11-11-celana-andalan",
   "scheduled_at": "2026-11-11T21:00:00+08:00",
   "series": "kurasi",
@@ -48,5 +48,9 @@
       "commission": "6,5%"
     }
   ],
-  "first_listed_at": "2026-11-11T10:42:48+00:00"
+  "first_listed_at": "2026-11-11T10:42:48+00:00",
+  "threads_id": "18103456115381423",
+  "posted_at": "2026-11-11T13:18:55+00:00",
+  "permalink": "https://www.threads.com/@nara.mixmatch/post/Dfmkm0nlJpt",
+  "reply_status": "menunggu: belum 1 jam"
 }
