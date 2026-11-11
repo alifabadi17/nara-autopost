@@ -1,0 +1,51 @@
+{
+  "status": "draft",
+  "id": "2026-11-11-celana-andalan",
+  "scheduled_at": "2026-11-11T21:00:00+08:00",
+  "series": "kurasi",
+  "text": "CELANA YANG BIKIN OUTFIT SIMPEL AUTO KELIATAN MIKIR 👖\n\nVersi buat warga Threads yang males mix & match tiap pagi:\n1. Straight wide-leg MILLION (±256rb)\n2. Legacy Wide Pants COTTONARY (±255rb)\n3. Barrel jeans UP GRADE (±206rb)\n4. Kulot layer Kamila (±246rb)\n5. Barrel jeans Geela (±365rb)\n\nKalian tim wide-leg, barrel, atau kulot? 👀",
+  "reply_text": "Link tokonya biar ga nyasar:\n1. MILLION Millionaire Pants: https://s.shopee.co.id/6filutdHO3\n2. COTTONARY Legacy Wide Pants: https://s.shopee.co.id/6L5vWGRtHg\n3. UP GRADE June Barrel Jeans: https://s.shopee.co.id/8fTqIZwovm\n4. Kamila Rui Kulot Layer: https://s.shopee.co.id/2VtCxDEuuN\n5. Geela Barrel Dark Blue Jeans: https://s.shopee.co.id/70LcJWwduN\n\nHarga bisa berubah, cek lagi di tokonya ya",
+  "images": [],
+  "products": [
+    {
+      "item": "MILLION Millionaire Pants (straight wide-leg)",
+      "shop": "MILLION",
+      "url": "https://s.shopee.co.id/6filutdHO3",
+      "price": 256500,
+      "sold": "386 terjual",
+      "commission": "9,5%"
+    },
+    {
+      "item": "COTTONARY Legacy Wide Pants",
+      "shop": "COTTONARY",
+      "url": "https://s.shopee.co.id/6L5vWGRtHg",
+      "price": 255000,
+      "sold": "576 terjual",
+      "commission": "5,5%"
+    },
+    {
+      "item": "UP GRADE June Barrel Jeans",
+      "shop": "UP GRADE",
+      "url": "https://s.shopee.co.id/8fTqIZwovm",
+      "price": 206402,
+      "sold": "280 terjual",
+      "commission": "11,5%"
+    },
+    {
+      "item": "Kamila Rui Kulot Layer",
+      "shop": "Kamila",
+      "url": "https://s.shopee.co.id/2VtCxDEuuN",
+      "price": 246000,
+      "sold": "766 terjual",
+      "commission": "4,5%"
+    },
+    {
+      "item": "Geela Barrel Dark Blue Jeans",
+      "shop": "Geela Official",
+      "url": "https://s.shopee.co.id/70LcJWwduN",
+      "price": 364950,
+      "sold": "255 terjual",
+      "commission": "6,5%"
+    }
+  ]
+}

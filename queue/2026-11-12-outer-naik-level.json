@@ -1,0 +1,51 @@
+{
+  "status": "draft",
+  "id": "2026-11-12-outer-naik-level",
+  "scheduled_at": "2026-11-12T12:30:00+08:00",
+  "series": "kurasi",
+  "text": "OUTER YANG BIKIN KEMEJA POLOS NAIK LEVEL ✨\n\n1. Madison Knit Cardigan MILLION (±224rb)\n2. Lily Knit Beads, cardigan payet CAMASILAR (±235rb)\n3. Sienna Blouse pleats NONAHELLU (±240rb)\n4. Aody Top denim Bucketlist (±100rb, udah 4rb+ terjual)\n\nBonus tas yang masuk ke semua outfit di atas: Solana Bag FLICKA (±199rb).\n\nTim cardigan rajut atau outer tipis?",
+  "reply_text": "Link tokonya:\n1. MILLION Madison Knit Cardigan: https://s.shopee.co.id/1LhFZ7it9V\n2. CAMASILAR Lily Knit Beads: https://s.shopee.co.id/LoiNIqLbO\n3. NONAHELLU Sienna Blouse: https://s.shopee.co.id/60T57hvZqO\n4. Bucketlist Aody Top: https://s.shopee.co.id/1BrybyzxQ\n5. FLICKA Solana Bag: https://s.shopee.co.id/50aXvf0APa\n\nHarga bisa berubah, cek lagi di tokonya ya",
+  "images": [],
+  "products": [
+    {
+      "item": "MILLION Madison Knit Cardigan",
+      "shop": "MILLION",
+      "url": "https://s.shopee.co.id/1LhFZ7it9V",
+      "price": 224250,
+      "sold": "139 terjual",
+      "commission": "9,5%"
+    },
+    {
+      "item": "CAMASILAR Lily Knit Beads Cardigan",
+      "shop": "CAMASILAR",
+      "url": "https://s.shopee.co.id/LoiNIqLbO",
+      "price": 235000,
+      "sold": "72 terjual",
+      "commission": "3,5%"
+    },
+    {
+      "item": "NONAHELLU Sienna Blouse (outer pleats)",
+      "shop": "NONAHELLU",
+      "url": "https://s.shopee.co.id/60T57hvZqO",
+      "price": 240000,
+      "sold": "91 terjual",
+      "commission": "3,5%"
+    },
+    {
+      "item": "Bucketlist Aody Top (blouse denim)",
+      "shop": "Bucketlist",
+      "url": "https://s.shopee.co.id/1BrybyzxQ",
+      "price": 99800,
+      "sold": "4RB+ terjual",
+      "commission": "4,5%"
+    },
+    {
+      "item": "FLICKA Solana Bag",
+      "shop": "FLICKA",
+      "url": "https://s.shopee.co.id/50aXvf0APa",
+      "price": 199000,
+      "sold": "4RB+ terjual",
+      "commission": "5,5%"
+    }
+  ]
+}
