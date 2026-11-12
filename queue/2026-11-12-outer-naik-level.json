@@ -1,5 +1,5 @@
 {
-  "status": "draft",
+  "status": "posted",
   "id": "2026-11-12-outer-naik-level",
   "scheduled_at": "2026-11-12T12:30:00+08:00",
   "series": "kurasi",
@@ -48,5 +48,9 @@
       "commission": "5,5%"
     }
   ],
-  "first_listed_at": "2026-11-11T10:42:48+00:00"
+  "first_listed_at": "2026-11-11T10:42:48+00:00",
+  "threads_id": "18501417985102383",
+  "posted_at": "2026-11-12T04:38:55+00:00",
+  "permalink": "https://www.threads.com/@nara.mixmatch/post/DfoN5IsHGLt",
+  "reply_status": "menunggu: belum 1 jam"
 }
