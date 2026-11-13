@@ -49,7 +49,13 @@ GitHub Actions yang memposting; tugas Claude adalah mengisi antrean.
   Metadata asli file (termasuk tanda asal AI) dipertahankan; jangan pernah menghapusnya.
 - Jalankan `python3 -m nara validate` dan `python3 -m unittest discover -s tests` sebelum push.
 
-## KONSEP AKTIF (13 Nov 2026): papan outfit dari foto produk, TANPA model
+## KONSEP AKTIF (13 Nov 2026, malam): produk dipakaikan ke MANEKIN, latar tetap
+Latar tetap `images/ref/manekin-studio.jpg` (manekin TORSO: hanya atasan, outer, kemeja, rajut, blazer, dress,
+kalung; TIDAK untuk celana/rok). Prompt di `prompts/manekin.md`. Butuh Gemini API berbayar (belum aktif),
+jadi draft bergambar konsep ini menunggu billing. Papan katalog di bawah DITOLAK pemilik (Gen Z skip katalog);
+jangan dipakai lagi. Hook harus soft selling. Testimoni karangan dan foto orang dari Pinterest tetap dilarang.
+
+## (LAMA, DITOLAK) papan outfit dari foto produk
 Pemilik ingin 100% otomatis. Gambar = papan mix & match 1080x1350 yang dibuat workflow dari foto produk
 (`nara/board.py`). Untuk postingan bergambar, isi `boards` (bukan `image_prompt`):
 ```json
