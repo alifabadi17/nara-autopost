@@ -1,5 +1,5 @@
 {
-  "status": "draft",
+  "status": "hold",
   "id": "2026-11-13-millionaire-pants",
   "scheduled_at": "2026-11-13T21:00:00+08:00",
   "series": "1item3acara",
@@ -154,5 +154,6 @@
     }
   ],
   "ai_image": false,
-  "image_source": "board"
+  "image_source": "board",
+  "hold_reason": "format papan katalog ditolak pemilik 13 Nov; tunggu riset ulang"
 }
