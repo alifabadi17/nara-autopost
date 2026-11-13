@@ -39,8 +39,16 @@ def _draw(img, text):
     tw, th = right - left, bottom - top
     x, y = w - tw - size, h - th - size - top
     off = max(1, size // 14)
-    d.text((x + off, y + off), text, font=font, fill=(0, 0, 0, 110))
-    d.text((x, y), text, font=font, fill=(255, 255, 255, 215))
+    region = base.crop((max(0, int(x)), max(0, int(y)), min(w, int(x + tw)), min(h, int(y + th + top + off)))).convert("L")
+    hist = region.histogram()
+    total = sum(hist) or 1
+    lum = sum(i * c for i, c in enumerate(hist)) / total
+    if lum > 150:   # latar terang -> tulisan gelap
+        d.text((x + off, y + off), text, font=font, fill=(255, 255, 255, 120))
+        d.text((x, y), text, font=font, fill=(40, 32, 28, 200))
+    else:           # latar gelap -> tulisan putih
+        d.text((x + off, y + off), text, font=font, fill=(0, 0, 0, 110))
+        d.text((x, y), text, font=font, fill=(255, 255, 255, 215))
     return Image.alpha_composite(base, overlay)
 
 
