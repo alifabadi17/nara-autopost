@@ -153,5 +153,6 @@
       ]
     }
   ],
-  "ai_image": false
+  "ai_image": false,
+  "image_source": "board"
 }
