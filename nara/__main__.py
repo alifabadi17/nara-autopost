@@ -178,6 +178,13 @@ def cmd_fetch_products():
     return 0
 
 
+def cmd_boards():
+    from .board import run_boards
+    n = run_boards(core.load_posts(), core.REPO_ROOT, core.save_post)
+    print(f"{n} papan outfit dibuat.")
+    return 0
+
+
 def cmd_whoami():
     me = _threads().me()
     print(f"Token valid untuk @{me.get('username')} (id {me.get('id')}).")
@@ -208,6 +215,8 @@ def main(argv):
             return cmd_gemini_test()
         if cmd == "fetch-products":
             return cmd_fetch_products()
+        if cmd == "boards":
+            return cmd_boards()
         if cmd == "whoami":
             return cmd_whoami()
     except ThreadsError as e:

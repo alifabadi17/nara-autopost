@@ -348,3 +348,28 @@ class ExtensionTest(unittest.TestCase):
             self.assertEqual(json.loads((root / "queue" / "a.json").read_text())["images"], ["images/a-1.png"])
         finally:
             shutil.rmtree(root)
+
+
+class BoardTest(unittest.TestCase):
+    def test_boards_render_and_set_images(self):
+        from PIL import Image
+        from nara.board import run_boards
+        root = Path(tempfile.mkdtemp())
+        try:
+            (root / "queue").mkdir(); (root / "products").mkdir()
+            for n in ("a", "b"):
+                Image.new("RGB", (500, 500), (200, 100, 50)).save(root / "products" / f"{n}.jpg")
+            items = [{"name": "Celana panjang sekali namanya sampai tidak muat satu baris", "price": 256500,
+                      "image": "products/a.jpg"}, {"name": "Kemeja", "price": 89900, "image": "products/b.jpg"}]
+            post = {"id": "x", "status": "draft", "scheduled_at": "2026-11-14T12:30:00+08:00", "text": "t",
+                    "boards": [{"title": "Ngantor", "items": items}, {"title": "Nongki", "items": items[:1]}]}
+            (root / "queue" / "x.json").write_text(json.dumps(post))
+            posts = core.load_posts(root / "queue")
+            self.assertEqual(run_boards(posts, root, core.save_post, log=lambda *a: None), 2)
+            saved = json.loads((root / "queue" / "x.json").read_text())
+            self.assertEqual(saved["images"], ["images/x-1.jpg", "images/x-2.jpg"])
+            self.assertEqual(Image.open(root / "images" / "x-1.jpg").size, (1080, 1350))
+            self.assertEqual(run_boards(core.load_posts(root / "queue"), root, core.save_post,
+                                        log=lambda *a: None), 0)
+        finally:
+            shutil.rmtree(root)

@@ -49,6 +49,20 @@ GitHub Actions yang memposting; tugas Claude adalah mengisi antrean.
   Metadata asli file (termasuk tanda asal AI) dipertahankan; jangan pernah menghapusnya.
 - Jalankan `python3 -m nara validate` dan `python3 -m unittest discover -s tests` sebelum push.
 
+## KONSEP AKTIF (13 Nov 2026): papan outfit dari foto produk, TANPA model
+Pemilik ingin 100% otomatis. Gambar = papan mix & match 1080x1350 yang dibuat workflow dari foto produk
+(`nara/board.py`). Untuk postingan bergambar, isi `boards` (bukan `image_prompt`):
+```json
+"boards": [{"title": "Ngantor", "subtitle": "Rapi tapi ga kaku",
+            "items": [{"name": "MILLION Millionaire Pants", "price": 256500, "image": "products/x.jpg"}, ...]}]
+```
+Item pertama = item utama (diberi label "ITEM UTAMA"), maks 4 item per papan, 1 papan per acara.
+Foto produk: tambahkan `"nama-file": "<url gambar susercontent>"` ke `products/urls.json`, push, lalu workflow
+`Ambil foto produk` mengunduhnya ke `products/<nama-file>.jpg` (tunggu file ada sebelum menulis draft).
+SETIAP item yang tampil di papan wajib punya link afiliasi di `reply_text` (permintaan pemilik).
+Pakai ulang item "lemari kapsul" yang sudah punya foto + link bila cocok. Set `"ai_image": false`.
+Konsep model AI Nara (bank gambar / Gemini) DITUNDA.
+
 ## Identitas akun
 @nara.mixmatch, nama "Nara | 1 Item 3 Acara". Nara adalah karakter AI (disebut di bio).
 Nara boleh berpendapat, bertanya, mengkurasi, dan memberi ide padu padan. Nara TIDAK mengaku membeli,

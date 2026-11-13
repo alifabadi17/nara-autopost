@@ -1,16 +1,15 @@
 {
   "status": "draft",
   "id": "2026-11-13-millionaire-pants",
-  "scheduled_at": "2026-11-13T12:30:00+08:00",
+  "scheduled_at": "2026-11-13T21:00:00+08:00",
   "series": "1item3acara",
-  "text": "1 CELANA, 3 ACARA: straight wide-leg krem 👖\n\n1️⃣ Ngantor: kemeja putih + loafers Mary Jane + tas kulit cokelat\n2️⃣ Nongki sore: basic tee + cardigan rajut cokelat + sneakers putih\n3️⃣ Kondangan siang: kemeja satin navy + flat shoes pita + tas mini\n\nSemua itemnya ada linknya di balasan, jadi ga usah nanya \"bajunya apa\" lagi 😆 Kalian paling suka look yang mana?",
+  "text": "1 CELANA KREM, 3 ACARA 👖\n\nGeser buat liat padu padannya:\n1️⃣ Ngantor: kemeja putih + loafers Mary Jane + tas cokelat\n2️⃣ Nongki sore: basic tee + cardigan rajut + sneakers putih\n3️⃣ Kondangan siang: kemeja satin navy + flat shoes pita + tas mini\n\nSemua itemnya ada linknya di balasan, jadi ga usah nanya \"bajunya apa\" lagi 😆 Kalian paling suka look yang mana?",
   "reply_text": "Detail outfitnya:\nCelana: https://s.shopee.co.id/6filutdHO3\n1️⃣ Kemeja: https://s.shopee.co.id/1qdWF4I9Bf\nLoafers: https://s.shopee.co.id/6filzxQlQH\nTas: https://s.shopee.co.id/50aXvf0APa\n2️⃣ Tee: https://s.shopee.co.id/3LSK1q8BOf\nCardigan: https://s.shopee.co.id/1LhFZ7it9V\nSneakers: https://s.shopee.co.id/4LKrDlKqgL\n3️⃣ Satin: https://s.shopee.co.id/5q9f0WeqiG\nFlat: https://s.shopee.co.id/1BNpRxMwd6\nTas mini: https://s.shopee.co.id/3qOacriHIr",
   "images": [
     "images/2026-11-13-millionaire-pants-1.jpg",
     "images/2026-11-13-millionaire-pants-2.jpg",
     "images/2026-11-13-millionaire-pants-3.jpg"
   ],
-  "image_prompt": "FOTO 1 (ngantor). Lampirkan: products/2026-11-13-millionaire-pants.jpg, products/kemeja-elsa.jpg, products/loafers-cekhas-zudith.jpg, products/flicka-solana.jpg. Buat foto Nara memakai PERSIS item-item di foto produk itu: celana krem straight wide-leg berlipit, kemeja putih dimasukkan ke celana, loafers Mary Jane hitam bertali, tas bahu kulit cokelat tua. Abaikan model di foto produk. Latar ruang duduk terang: dinding hijau sage keabuan, pintu kaca geser dengan gorden putih tipis, kursi goyang kayu jati, meja samping bulat bertumpuk krem, vas keramik, lantai keramik putih, cahaya alami siang.\n\nFOTO 2 (nongki sore). Lampirkan: products/2026-11-13-millionaire-pants.jpg, products/top-awsome-basic.jpg, products/million-madison-cardigan.jpg, products/sneakers-mjc-fabrica.jpg. Nara memakai celana krem yang sama, kaos basic fitted putih gading, cardigan rajut cokelat dikancing sebagian, sneakers putih. Latar kamar minimalis serba putih: dinding dan plafon putih, lampu dinding hitam, kasur putih dengan bantal krem dan satu bantal motif zebra, karpet kecil hitam-putih, lantai keramik putih, cahaya terang alami.\n\nFOTO 3 (kondangan siang). Lampirkan: products/2026-11-13-millionaire-pants.jpg, products/kemeja-satin-premium.jpg, products/flat-pluvia-anne.jpg, products/tas-rainsmore-mini.jpg. Nara memakai celana krem yang sama, kemeja satin navy dimasukkan, flat shoes balet hitam berpita, tas mini lilac berantai emas. Latar kamar mewah bernuansa gelap: dinding panel kayu abu-abu tua hampir hitam, plafon putih krem dengan list ukir dan lampu sorot kecil, dua lampu meja kap kain kuning hangat di nakas hitam, kasur putih dengan headboard panel hitam, lantai keramik putih mengkilap, cahaya hangat.\n\nUntuk semua foto: wajah dan tubuh sesuai karakter Nara, badan penuh dari kepala sampai kaki, semua item terlihat jelas, rasio 4:5, tanpa teks.",
   "products": [
     {
       "item": "MILLION Millionaire Pants (krem)",
@@ -73,5 +72,86 @@
       "sold": "10RB+ terjual"
     }
   ],
-  "first_listed_at": "2026-11-11T10:42:48+00:00"
+  "first_listed_at": "2026-11-11T10:42:48+00:00",
+  "boards": [
+    {
+      "title": "Ngantor",
+      "subtitle": "Rapi tapi ga kaku",
+      "items": [
+        {
+          "name": "MILLION Millionaire Pants",
+          "price": 256500,
+          "image": "products/2026-11-13-millionaire-pants.jpg"
+        },
+        {
+          "name": "Kemeja Kerja Elsa",
+          "price": 89900,
+          "image": "products/kemeja-elsa.jpg"
+        },
+        {
+          "name": "CEKHAS Zudith Loafers",
+          "price": 324000,
+          "image": "products/loafers-cekhas-zudith.jpg"
+        },
+        {
+          "name": "FLICKA Solana Bag",
+          "price": 199000,
+          "image": "products/flicka-solana.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Nongki sore",
+      "subtitle": "Santai, tetap kelihatan niat",
+      "items": [
+        {
+          "name": "MILLION Millionaire Pants",
+          "price": 256500,
+          "image": "products/2026-11-13-millionaire-pants.jpg"
+        },
+        {
+          "name": "Awsome Basic Top",
+          "price": 56020,
+          "image": "products/top-awsome-basic.jpg"
+        },
+        {
+          "name": "MILLION Madison Cardigan",
+          "price": 224250,
+          "image": "products/million-madison-cardigan.jpg"
+        },
+        {
+          "name": "MJC Fabrica Sneakers",
+          "price": 113850,
+          "image": "products/sneakers-mjc-fabrica.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Kondangan siang",
+      "subtitle": "Elegan tanpa ribet",
+      "items": [
+        {
+          "name": "MILLION Millionaire Pants",
+          "price": 256500,
+          "image": "products/2026-11-13-millionaire-pants.jpg"
+        },
+        {
+          "name": "Kemeja Satin Premium",
+          "price": 79363,
+          "image": "products/kemeja-satin-premium.jpg"
+        },
+        {
+          "name": "Pluvia Anne Flat Shoes",
+          "price": 100000,
+          "image": "products/flat-pluvia-anne.jpg"
+        },
+        {
+          "name": "RAINSMORE Mini Bag",
+          "price": 117000,
+          "image": "products/tas-rainsmore-mini.jpg"
+        }
+      ]
+    }
+  ],
+  "ai_image": false
 }

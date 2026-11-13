@@ -1,25 +1,133 @@
 {
   "status": "draft",
   "id": "2026-11-13-barrel-jeans",
-  "scheduled_at": "2026-11-13T19:30:00+08:00",
+  "scheduled_at": "2026-11-14T12:30:00+08:00",
   "series": "1item3acara",
-  "text": "BARREL JEANS BUAT 3 ACARA, BIAR GA CUMA BUAT FOTO DOANG 😭\n\n1️⃣ Ngampus: kemeja oversized biru muda + sneakers\n2️⃣ Ke mal: baby tee putih + shoulder bag + flat shoes\n3️⃣ Dinner: knit top hitam + heels pendek\n\nJeansnya UP GRADE June Barrel (±206rb). Tim barrel atau masih setia sama straight?",
-  "reply_text": "Jeansnya di sini: https://s.shopee.co.id/8fTqIZwovm\nHarga bisa berubah, cek lagi di tokonya ya",
+  "text": "BARREL JEANS BUAT 3 ACARA, BIAR GA CUMA BUAT FOTO DOANG 😭\n\nGeser buat liat padu padannya:\n1️⃣ Ngampus: kemeja putih + sneakers + tas kulit cokelat\n2️⃣ Jalan ke mal: basic tee + flat shoes pita + tas mini\n3️⃣ Dinner santai: kemeja satin navy + loafers Mary Jane\n\nAtasan, sepatu, sama tasnya bisa dipake ulang sama celana kemarin juga loh. Tim barrel atau straight?",
+  "reply_text": "Detail outfitnya:\nJeans: https://s.shopee.co.id/8fTqIZwovm\n1️⃣ Kemeja: https://s.shopee.co.id/1qdWF4I9Bf\nSneakers: https://s.shopee.co.id/4LKrDlKqgL\nTas: https://s.shopee.co.id/50aXvf0APa\n2️⃣ Tee: https://s.shopee.co.id/3LSK1q8BOf\nFlat: https://s.shopee.co.id/1BNpRxMwd6\nTas mini: https://s.shopee.co.id/3qOacriHIr\n3️⃣ Satin: https://s.shopee.co.id/5q9f0WeqiG\nLoafers: https://s.shopee.co.id/6filzxQlQH",
   "images": [
     "images/2026-11-13-barrel-jeans-1.jpg",
     "images/2026-11-13-barrel-jeans-2.jpg",
     "images/2026-11-13-barrel-jeans-3.jpg"
   ],
-  "image_prompt": "Lampirkan foto produk products/2026-11-13-barrel-jeans.jpg. Ambil HANYA jeans yang KIRI: barrel jeans warna biru muda (light wash), pinggang tinggi, siluet melengkung lebar di lutut lalu menyempit di mata kaki. Abaikan wajah dan tubuh model di foto produk. Buat 3 foto Nara (wajah dan tubuh sesuai karakter Nara) memakai jeans yang PERSIS sama itu, untuk 3 acara: (1) ngampus: kemeja oversized biru muda, tote bag, sneakers putih; latar ruang duduk terang: dinding hijau sage keabuan, pintu kaca geser dengan gorden putih tipis, kursi goyang kayu jati, meja samping bulat bertumpuk krem, vas keramik, lantai keramik putih, cahaya alami siang. (2) jalan sore ke mal: baby tee putih, shoulder bag kecil, flat shoes; latar kamar minimalis serba putih: dinding dan plafon putih, lampu dinding hitam, kasur putih dengan bantal krem dan satu bantal motif zebra, karpet kecil hitam-putih, lantai keramik putih, cahaya terang alami. (3) dinner santai: knit top hitam, kalung tipis, heels pendek; latar kamar mewah bernuansa gelap: dinding panel kayu abu-abu tua hampir hitam, plafon putih krem dengan list ukir dan lampu sorot kecil, dua lampu meja kap kain kuning hangat di nakas hitam, kasur putih dengan headboard panel hitam, lantai keramik putih mengkilap, cahaya hangat. Badan penuh dari kepala sampai kaki, siluet barrel terlihat jelas, rasio 4:5, tanpa teks.",
   "products": [
     {
-      "item": "UP GRADE June Barrel Jeans",
-      "shop": "UP GRADE",
-      "url": "https://s.shopee.co.id/8fTqIZwovm",
-      "price": 206402,
-      "sold": "280 terjual",
-      "commission": "11,5%"
+      "item": "jeans",
+      "url": "https://s.shopee.co.id/8fTqIZwovm"
+    },
+    {
+      "item": "kemeja",
+      "url": "https://s.shopee.co.id/1qdWF4I9Bf"
+    },
+    {
+      "item": "sneak",
+      "url": "https://s.shopee.co.id/4LKrDlKqgL"
+    },
+    {
+      "item": "flicka",
+      "url": "https://s.shopee.co.id/50aXvf0APa"
+    },
+    {
+      "item": "tee",
+      "url": "https://s.shopee.co.id/3LSK1q8BOf"
+    },
+    {
+      "item": "flat",
+      "url": "https://s.shopee.co.id/1BNpRxMwd6"
+    },
+    {
+      "item": "mini",
+      "url": "https://s.shopee.co.id/3qOacriHIr"
+    },
+    {
+      "item": "satin",
+      "url": "https://s.shopee.co.id/5q9f0WeqiG"
+    },
+    {
+      "item": "loaf",
+      "url": "https://s.shopee.co.id/6filzxQlQH"
     }
   ],
-  "first_listed_at": "2026-11-11T10:42:48+00:00"
+  "first_listed_at": "2026-11-11T10:42:48+00:00",
+  "boards": [
+    {
+      "title": "Ngampus",
+      "subtitle": "Nyaman dari kelas pagi sampai sore",
+      "items": [
+        {
+          "name": "UP GRADE June Barrel Jeans",
+          "price": 206402,
+          "image": "products/2026-11-13-barrel-jeans.jpg"
+        },
+        {
+          "name": "Kemeja Kerja Elsa",
+          "price": 89900,
+          "image": "products/kemeja-elsa.jpg"
+        },
+        {
+          "name": "MJC Fabrica Sneakers",
+          "price": 113850,
+          "image": "products/sneakers-mjc-fabrica.jpg"
+        },
+        {
+          "name": "FLICKA Solana Bag",
+          "price": 199000,
+          "image": "products/flicka-solana.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Jalan ke mal",
+      "subtitle": "Simpel tapi ga asal",
+      "items": [
+        {
+          "name": "UP GRADE June Barrel Jeans",
+          "price": 206402,
+          "image": "products/2026-11-13-barrel-jeans.jpg"
+        },
+        {
+          "name": "Awsome Basic Top",
+          "price": 56020,
+          "image": "products/top-awsome-basic.jpg"
+        },
+        {
+          "name": "Pluvia Anne Flat Shoes",
+          "price": 100000,
+          "image": "products/flat-pluvia-anne.jpg"
+        },
+        {
+          "name": "RAINSMORE Mini Bag",
+          "price": 117000,
+          "image": "products/tas-rainsmore-mini.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Dinner santai",
+      "subtitle": "Satu kemeja, langsung naik level",
+      "items": [
+        {
+          "name": "UP GRADE June Barrel Jeans",
+          "price": 206402,
+          "image": "products/2026-11-13-barrel-jeans.jpg"
+        },
+        {
+          "name": "Kemeja Satin Premium",
+          "price": 79363,
+          "image": "products/kemeja-satin-premium.jpg"
+        },
+        {
+          "name": "CEKHAS Zudith Loafers",
+          "price": 324000,
+          "image": "products/loafers-cekhas-zudith.jpg"
+        },
+        {
+          "name": "FLICKA Solana Bag",
+          "price": 199000,
+          "image": "products/flicka-solana.jpg"
+        }
+      ]
+    }
+  ],
+  "ai_image": false
 }

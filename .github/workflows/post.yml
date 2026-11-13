@@ -8,7 +8,7 @@ on:
     types: [edited]
   push:
     branches: [main]
-    paths: ["queue/**", "images/**", "config.json"]
+    paths: ["queue/**", "images/**", "products/**", "config.json"]
 
 permissions:
   contents: write
@@ -38,6 +38,7 @@ jobs:
         run: |
           pip install -q pillow
           python3 -m nara generate
+          python3 -m nara boards
           python3 -m nara watermark
           git add images queue
           if ! git diff --cached --quiet; then
