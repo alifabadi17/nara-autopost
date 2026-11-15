@@ -1,6 +1,6 @@
 {
   "id": "2026-11-15-uji-ugc",
-  "status": "draft",
+  "status": "posted",
   "scheduled_at": "2026-11-15T23:15:00+08:00",
   "text": "Barrel jeans biru muda + kaus krem buat ide outfit santai. Kamu lebih suka dipadukan dengan flat shoes atau sneakers?",
   "reply_text": "",
@@ -10,5 +10,8 @@
   "ai_image": true,
   "image_source": "openai-imagegen",
   "test_note": "Uji sistem gambar dan publikasi, disetujui pemilik di chat 15 November 2026.",
-  "first_listed_at": "2026-11-15T15:16:45+00:00"
+  "first_listed_at": "2026-11-15T15:16:45+00:00",
+  "threads_id": "18646001206013145",
+  "posted_at": "2026-11-15T15:17:04+00:00",
+  "permalink": "https://www.threads.com/@nara.mixmatch/post/DfxFT0YFfao"
 }
