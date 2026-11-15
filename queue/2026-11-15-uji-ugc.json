@@ -9,5 +9,6 @@
   ],
   "ai_image": true,
   "image_source": "openai-imagegen",
-  "test_note": "Uji sistem gambar dan publikasi, disetujui pemilik di chat 15 November 2026."
+  "test_note": "Uji sistem gambar dan publikasi, disetujui pemilik di chat 15 November 2026.",
+  "first_listed_at": "2026-11-15T15:16:45+00:00"
 }
