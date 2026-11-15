@@ -345,7 +345,12 @@ def reply_decision(post, threads, cfg, now):
         return "wait", "belum 1 jam"
     if not min_views:
         return "post", ""
-    views = (threads.insights(post["threads_id"]) or {}).get("views") or 0
+    try:
+        views = (threads.insights(post["threads_id"]) or {}).get("views") or 0
+    except Exception:
+        if now >= posted_at + max_wait:
+            return "skip", "batas waktu balasan habis; views tidak dapat diperiksa"
+        raise
     post["views_at_check"] = views
     if views >= min_views:
         return "post", f"{views} views"
