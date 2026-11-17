@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-17-sigma-june",
+  "status": "draft",
+  "scheduled_at": "2026-11-18T08:30:00+08:00",
+  "series": "outfit-harian",
+  "text": "wine red + denim biru, kombinasi buat jalan sore 🍒\n\ndetail silang di atasannya sudah jadi fokus, tinggal dipaduin sama jeans longgar.\n\nkamu pilih sneakers atau flat shoes buat look ini?",
+  "reply_text": "Referensi outfit:\nAtasan: Orlo Sigma Top — Wine Red\nhttps://shopee.co.id/product/798830635/25338183745\nJeans: UP GRADE June — Snow Blue\nhttps://s.shopee.co.id/8fTqIZwovm\n\nLink jeans afiliasi; link atasan tautan toko biasa. Visualisasi styling AI—cek foto, warna, dan ukuran produk di toko.",
+  "images": [
+    "images/2026-11-17-sigma-june-1.png",
+    "images/2026-11-17-sigma-june-2.png",
+    "images/2026-11-17-sigma-june-3.png"
+  ],
+  "ai_image": true,
+  "image_source": "openai-imagegen",
+  "products": [
+    {
+      "item": "Orlo Sigma Top Wine Red",
+      "shop": "orlo.id",
+      "url": "https://shopee.co.id/product/798830635/25338183745"
+    },
+    {
+      "item": "UP GRADE June Snow Blue 80-425.3",
+      "shop": "UP GRADE Jeans",
+      "url": "https://s.shopee.co.id/8fTqIZwovm"
+    }
+  ],
+  "approval_note": "Pemilik menyetujui unggah sesuai jadwal dan tautan setelah 300 views pada 17 November 2026."
+}
